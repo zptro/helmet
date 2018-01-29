@@ -1,0 +1,74 @@
+~# ***********************************************************************
+~# ***                           HELMET 2.1                            ***
+~# ***                      HELMET-liikennemalli                       ***
+~# ***                  cmd-makro_sij_loppu_sij16.mac                  ***
+~# ***              WSP Finland, ARa 2010-03-17                        ***
+~# ***              WSP Finland, ARa 2010-04-15 (paivitys)             ***
+~# ***                       HSL, TE 2014-03-01                        ***
+~# ***                       HSL, TE 2014-03-06                        ***
+~# ***              WSP Finland, ARa 2014-04-15 (HM21)                 ***  
+~# ***              WSP Finland, ARa 2014-06-03 (pituusr. funktiot)    ***
+~# ***                       HSL, TE 2014-10-23 (kommenttien muokkaus) ***
+~# ***                       HSL, TE 2015-01-14 (ECHO tekstin ohjaus   ***
+~# ***   HSL,  TE 2015-06-02 (yhdistetty path-maarittely foldereihin)  ***
+~# ***********************************************************************
+~#
+~# Talla makrolla ajetaan loppusijoittelu, jossa kaytetaan 
+~# PITUUSRIIPPUVAISIA sijoittelufunktioita. 
+~# (funktioita voi tarvittaessa vaihtaa koodista, mutta silloin pit‰‰
+~#  huomioida tavaraliikenne, ks. huomautus funktiotiedostossa 
+~#  d411_pituusriippuvaiset_HM21.in)
+~#
+~#
+~# Makron ajaminen (summaustaso parametrina)
+~# ~<cmd-makro_sij_loppu_sij16.mac  p1  p2
+~# parametrit
+~#    p1  ennustealuejakoa vastaava aggregaatiotaso (esim. gf)
+~#    p2  tulosmatriisien otsikkoon tuleva skenaarion tunnus
+~#        (esim. 2020TAV, oletus LOPPU)
+~# 
+~# Nimikirjaimet
+HSL
+~#
+~o=37 / Turhat tauot ja tulostus pois
+~#
+~t1=%1%
+~?t1=
+~$VIRHE
+~#
+~t2=%2%
+~?t2=
+~t2=LOPPU
+~#
+~# *** PITUUSRIIPPUVAISET sijoittelufunktiot sisaan pankkiin
+~t4=d411_pituusriippuvaiset_HM30.in
+~# ~t4=d411_pituusriippuvaiset_HM21.in
+~# ~t4=d411_alkuperaiset.in
+~# ~t4=d411_konikaali_tarkennetut.in
+~# ~t4=d411_leikkuri_30pros.in
+4.11
+~?e
+%t4%
+~?q=2
+2
+~#
+~! ECHO Luettu %t4%  >> %ENNUSTEFOLDER%\database\bat_loki_ka.txt
+~# 
+~# *** Ajetaan sisaan ja jaetaan sijoittelualueille ha- ja jkl-kysynta
+~<sisaanajo_loppu_sij16.mac  %t2%
+~#
+~#
+~$LOPPU
+~#
+~:VIRHE
+~/ puuttuva summaustaso (esim. gf)
+~#
+~:LOPPU
+~/ *** Loppusijoittelun cmd-makro_sij_loppu_sij16.MAC ajettu loppuun parametreilla %t1% %t2%
+~/ *** Lopetetaan Emme sijoittelupankissa.
+~/
+q
+reports=
+~#
+~# Makro paattyy tahan
+

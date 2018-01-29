@@ -1,0 +1,47 @@
+~# ***********************************************************************
+~# ***                          AJA_PERUS_M2016.MAC                    ***
+~# ***                  Strafica Oy, ARa 2013-12-28                    ***
+~# ***                          WSP, ARA 2014-04-15 (HM21)             ***
+~# ***                          WSP, ARa 2014-05-06                    ***
+~# ***********************************************************************
+~#
+~# Muutokset:
+~# 14.7.2014 (HSL/TE)
+~#    Siirretty ruuhkamaksuajot uuteen makroon ajalaske_ruma.mac
+~# 8.4.2017 (HSL/TE)
+~#    muutettu kulkutavat ja aluejako M2016 mukaisesti
+~# 26.7.2017 (HSL/TE)
+~#    muutettu vastusmatriisien yhteenvetoraporttien aggregoinniksi gr parametrin %1% asemesta
+~#    ja lisatty niputettujen hake-vastusten luku
+~# 11.1.2018 (HSL/TE)
+~#    muutettu vastusmathake_HM21.mac versioksi vastusmathake_HM30.mac
+~#
+~# muista tuhota ensin jakoluvut.%1%max ja vastusmatriisit.%1%sum!!
+~#
+~t1=%1%
+~?t1=
+~$VIRHE
+~#
+~/ Makron AJA_PERUS_M2016.MAC suoritus alkaa 
+~/ (matka-ajoissa on etaisyystekijana 0.2)
+~#
+~<ajatotaika_perus.mac
+~<ajasissade_perus.mac
+~<kopimat_perus.mac
+~<ajavastus2_perus.mac
+~<ajaoutin2_perus_jkl.mac   gr
+~<ajatulvastus2_perus.mac   gr
+~<ajakev_M2016.mac
+~<vastusmathake_HM30.mac    gr
+~<ajaoutin2_perus_hake.mac  gr
+~<aja_suoritteet.mac
+~<hankearvdata.mac
+~$LOPPU
+~#
+~:VIRHE
+~/ *** Anna partion tunnus, esim. gf tai EI, jos matriiseja ei aggregoida ***
+~t1=<nul>
+~#
+~:LOPPU
+~/ Makron AJA_PERUS_M2016.MAC suoritus paattyy partitiolla %t1%
+~/
