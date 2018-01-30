@@ -204,8 +204,6 @@ Emme -ng -m import.mac %ENNUSTEFOLDER% mf01 mf06
 @REM
 @rem Kaynnistetaan Emme sijoittelupankissa suoraan makroon, joka tekee kaiken tarvittavan
 Emme -ng -m aja_sisajo_loppu.mac  EI  %2
-Emme -ng -m ajalaske_ruma.mac 0.2
-Emme -ng -m ajahass_HM21_perus.mac 0.2
 Emme -ng -m ajatrass_perus_M2016.mac
 Emme -ng -m AJA_LOPUT_M2016.MAC  EI
 "%EMMEPATH%\Python27\python.exe" hankearvdata.py %SIJOITTELUFOLDER%\Database
