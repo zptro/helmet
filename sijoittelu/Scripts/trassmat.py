@@ -254,18 +254,24 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
     trass(trass_spec, emme_bank.scenario(scen_id))
 
     tottim_id = "mf" + result_mat_id + "0"
+    noboa_id = "mf" + result_mat_id + "6"
     # create_matrix(matrix_id=tottim_id,
                   # matrix_name="tottim",
                   # matrix_description="total time s= ah,tayd",
                   # default_value=0)
-    mat_results['specification'] = {
+    # create_matrix(matrix_id=noboa_id,
+                  # matrix_name="noboa",
+                  # matrix_description="no of board s= ah,tayd",
+                  # default_value=0)
+    result_spec = {
         "by_mode_subset": None,
         "type": "EXTENDED_TRANSIT_MATRIX_RESULTS",
         "total_impedance": tottim_id,
+        "avg_boardings": "mf26"
     }
-    mat_results.run()
+    mat_results(result_spec, emme_bank.scenario(scen_id))
     print "Transit assignment performed for scenario " + str(scen_id)
 
 trass_run(21, "mf4", "2")
-# trass_run(22, "mf6", "3")
-# trass_run(23, "mf5", "4")
+trass_run(22, "mf6", "3")
+trass_run(23, "mf5", "4")
