@@ -264,10 +264,23 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
                   # matrix_description="no of board s= ah,tayd",
                   # default_value=0)
     result_spec = {
-        "by_mode_subset": None,
         "type": "EXTENDED_TRANSIT_MATRIX_RESULTS",
         "total_impedance": tottim_id,
-        "avg_boardings": "mf26"
+        "by_mode_subset": {
+            "modes": [
+                "b",
+                "d",
+                "e",
+                "g",
+                "j",
+                "m",
+                "p",
+                "r",
+                "t",
+                "w",
+            ],
+            "avg_boardings": noboa_id,
+        },
     }
     mat_results(result_spec, emme_bank.scenario(scen_id))
     print "Transit assignment performed for scenario " + str(scen_id)
