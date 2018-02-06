@@ -10,11 +10,17 @@
 *.ema
 *.emx
 *.emp
+*.ems
 *.db
 *.dat
 *.prj
 *.mtbx
 *.mlbk
+*.cpg
+*.dbf
+*.qpj
+*.shp
+*.shx
 *.omx
 *.in
 *.gfsum
