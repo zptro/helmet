@@ -1,0 +1,21 @@
+~# *** ajatrass_perus_M2016.mac
+~#
+~# tehdaan joukkoliikennesijoittelut (kulkutavat M2016)
+~# muutettu bussivastusmatriisien numerot mf10-mf15 --> mf54-mf59
+~# 
+s=21
+~<trassmat_M2016.mac 4 2 tayd,ah
+~<trassmatosa_M2016.mac 4 2 tayd,ah
+~<trassmatosa_M2016_bus.mac 4 54 55 taydbus,ah
+s=22
+~<trassmat_M2016.mac 6 3 tayd,pa
+~<trassmatosa_M2016.mac 6 3 tayd,pa
+~<trassmatosa_M2016_bus.mac 6 56 57 taydbus,pa
+s=23
+~<trassmat_M2016.mac 5 4 tayd,ih
+~<trassmatosa_M2016.mac 5 4 tayd,ih
+~<trassmatosa_M2016_bus.mac 5 58 59 taydbus,ih
+~#
+~/ Kaikki trassmat*.mac -makrot on ajettu
+~/
+q

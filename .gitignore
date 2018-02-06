@@ -19,6 +19,7 @@
 *.in
 *.gfsum
 usemacro_*
+AJA_HM30.bat
 aja_vastus.bat
 copy_input_data_HM30.bat
 copy_input_matkat.bat

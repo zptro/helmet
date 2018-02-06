@@ -126,7 +126,7 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
         "journey_levels": [
             {
                 "description": "Not boarded yet",
-                "destinations_reachable": True,
+                "destinations_reachable": False,
                 "transition_rules": [
                     {
                         "mode": "b",
