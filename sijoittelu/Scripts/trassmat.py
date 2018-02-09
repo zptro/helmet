@@ -49,7 +49,7 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
     netw_specs.append({
         "type": "NETWORK_CALCULATION",
         "selections": {
-            "transit_line": "mode=b"
+            "transit_line": "mode=b",
         },
         "expression": "10",
         "result": "ut3",
@@ -58,7 +58,7 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
     netw_specs.append({
         "type": "NETWORK_CALCULATION",
         "selections": {
-            "transit_line": "mode=g"
+            "transit_line": "mode=g",
         },
         "expression": "8",
         "result": "ut3",
@@ -67,7 +67,7 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
     netw_specs.append({
         "type": "NETWORK_CALCULATION",
         "selections": {
-            "transit_line": "mode=de"
+            "transit_line": "mode=de",
         },
         "expression": "10",
         "result": "ut3",
@@ -76,7 +76,7 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
     netw_specs.append({
         "type": "NETWORK_CALCULATION",
         "selections": {
-            "transit_line": "mode=rj"
+            "transit_line": "mode=rj",
         },
         "expression": "5",
         "result": "ut3",
@@ -85,7 +85,7 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
     netw_specs.append({
         "type": "NETWORK_CALCULATION",
         "selections": {
-            "transit_line": "mode=mtpw"
+            "transit_line": "mode=mtpw",
         },
         "expression": "0",
         "result": "ut3",
@@ -95,7 +95,7 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
         "type": "NETWORK_CALCULATION",
         "selections": {
             "link": "all",
-			"transit_line": "mode=bgde"
+            "transit_line": "mode=bgde",
         },
         "expression": "0.1*index2",
         "result": "us3",
