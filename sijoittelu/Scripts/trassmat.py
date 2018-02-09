@@ -14,13 +14,36 @@ netcalc = emme_modeller.tool(
 create_matrix = emme_modeller.tool(
     "inro.emme.data.matrix.create_matrix"
 )
-trass = emme_modeller.tool(
+transit_assignment = emme_modeller.tool(
     "inro.emme.transit_assignment.extended_transit_assignment"
 )
 mat_results = emme_modeller.tool(
     "inro.emme.transit_assignment.extended.matrix_results"
 )
-
+transit_modes = [
+	'b',
+	'd',
+	'e',
+	'g',
+	'j',
+	'm',
+	'p',
+	'r',
+	't',
+	'w',
+]
+aux_modes = [
+	'a',
+	's',
+]
+transit_assignment_modes = transit_modes + aux_modes
+transitions = []
+for mode in transit_modes:
+    transitions.append({
+        "mode": mode,
+        "next_journey_level": 1
+    })
+	
 def trass_run (scen_id, demand_mat_id, result_mat_id):
     netw_specs = []
     netw_specs.append({
@@ -71,20 +94,7 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
     netcalc(netw_specs, emme_bank.scenario(scen_id))
     trass_spec = {
         "type": "EXTENDED_TRANSIT_ASSIGNMENT",
-        "modes": [
-            "b",
-            "d",
-            "e",
-            "g",
-            "j",
-            "m",
-            "p",
-            "r",
-            "t",
-            "w",
-            "a",
-            "s"
-        ],
+        "modes": transit_assignment_modes,
         "demand": demand_mat_id,
         "waiting_time": {
             "headway_fraction": 0.5,
@@ -136,48 +146,7 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
             {
                 "description": "Not boarded yet",
                 "destinations_reachable": False,
-                "transition_rules": [
-                    {
-                        "mode": "b",
-                        "next_journey_level": 1
-                    },
-                    {
-                        "mode": "d",
-                        "next_journey_level": 1
-                    },
-                    {
-                        "mode": "e",
-                        "next_journey_level": 1
-                    },
-                    {
-                        "mode": "g",
-                        "next_journey_level": 1
-                    },
-                    {
-                        "mode": "j",
-                        "next_journey_level": 1
-                    },
-                    {
-                        "mode": "m",
-                        "next_journey_level": 1
-                    },
-                    {
-                        "mode": "p",
-                        "next_journey_level": 1
-                    },
-                    {
-                        "mode": "r",
-                        "next_journey_level": 1
-                    },
-                    {
-                        "mode": "t",
-                        "next_journey_level": 1
-                    },
-                    {
-                        "mode": "w",
-                        "next_journey_level": 1
-                    }
-                ],
+                "transition_rules": transitions,
                 "boarding_time": {
                     "global": None,
                     "at_nodes": None,
@@ -193,48 +162,7 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
             {
                 "description": "Boarded at least once",
                 "destinations_reachable": True,
-                "transition_rules": [
-                    {
-                        "mode": "b",
-                        "next_journey_level": 1
-                    },
-                    {
-                        "mode": "d",
-                        "next_journey_level": 1
-                    },
-                    {
-                        "mode": "e",
-                        "next_journey_level": 1
-                    },
-                    {
-                        "mode": "g",
-                        "next_journey_level": 1
-                    },
-                    {
-                        "mode": "j",
-                        "next_journey_level": 1
-                    },
-                    {
-                        "mode": "m",
-                        "next_journey_level": 1
-                    },
-                    {
-                        "mode": "p",
-                        "next_journey_level": 1
-                    },
-                    {
-                        "mode": "r",
-                        "next_journey_level": 1
-                    },
-                    {
-                        "mode": "t",
-                        "next_journey_level": 1
-                    },
-                    {
-                        "mode": "w",
-                        "next_journey_level": 1
-                    }
-                ],
+                "transition_rules": transitions,
                 "boarding_time": {
                     "global": None,
                     "at_nodes": None,
@@ -260,7 +188,7 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
             "number_of_processors": "max"
         },
     }
-    trass(trass_spec, emme_bank.scenario(scen_id))
+    transit_assignment(trass_spec, emme_bank.scenario(scen_id))
 
     tottim_id = "mf" + result_mat_id + "0"
     noboa_id = "mf" + result_mat_id + "6"
@@ -276,18 +204,7 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
         "type": "EXTENDED_TRANSIT_MATRIX_RESULTS",
         "total_impedance": tottim_id,
         "by_mode_subset": {
-            "modes": [
-                "b",
-                "d",
-                "e",
-                "g",
-                "j",
-                "m",
-                "p",
-                "r",
-                "t",
-                "w",
-            ],
+            "modes": transit_modes,
             "avg_boardings": noboa_id,
         },
     }
