@@ -91,6 +91,16 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
         "result": "ut3",
         "aggregation": None,
     })
+    netw_specs.append({
+        "type": "NETWORK_CALCULATION",
+        "selections": {
+            "link": "all",
+			"transit_line": "mode=bgde"
+        },
+        "expression": "0.1*index2",
+        "result": "us3",
+        "aggregation": None,
+    })
     netcalc(netw_specs, emme_bank.scenario(scen_id))
     trass_spec = {
         "type": "EXTENDED_TRANSIT_ASSIGNMENT",
@@ -104,21 +114,21 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
         },
         "boarding_time": {
             "global": {
-                "penalty": 3,
-                "perception_factor": 1
+                "penalty": 0,
+                "perception_factor": 1,
             },
             "at_nodes": None,
             "on_lines": None,
-            "on_segments": None
+            "on_segments": None,
         },
         "boarding_cost": {
             "global": {
                 "penalty": 0,
-                "perception_factor": 1
+                "perception_factor": 1,
             },
             "at_nodes": None,
             "on_lines": None,
-            "on_segments": None
+            "on_segments": None,
         },
         "in_vehicle_time": {
             "perception_factor": 1
@@ -154,7 +164,10 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
                         "penalty": "ut3",
                         "perception_factor": 1
                     },
-                    "on_segments": None
+                    "on_segments": {
+                        "penalty": "us3",
+                        "perception_factor": 1
+                    },
                 },
                 "boarding_cost": None,
                 "waiting_time": None
@@ -179,7 +192,10 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
                     },
                     "at_nodes": None,
                     "on_lines": None,
-                    "on_segments": None                    
+                    "on_segments": {
+                        "penalty": "us3",
+                        "perception_factor": 1
+                    },                    
                 },
                 "waiting_time": None
             }
