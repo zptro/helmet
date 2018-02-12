@@ -21,20 +21,20 @@ mat_results = emme_modeller.tool(
     "inro.emme.transit_assignment.extended.matrix_results"
 )
 transit_modes = [
-	'b',
-	'd',
-	'e',
-	'g',
-	'j',
-	'm',
-	'p',
-	'r',
-	't',
-	'w',
+    'b',
+    'd',
+    'e',
+    'g',
+    'j',
+    'm',
+    'p',
+    'r',
+    't',
+    'w',
 ]
 aux_modes = [
-	'a',
-	's',
+    'a',
+    's',
 ]
 transit_assignment_modes = transit_modes + aux_modes
 transitions = []
@@ -43,8 +43,34 @@ for mode in transit_modes:
         "mode": mode,
         "next_journey_level": 1
     })
-	
+    
 def trass_run (scen_id, demand_mat_id, result_mat_id):
+    network = emme_bank.scenario(scen_id).get_network()
+    lines_iter = network.transit_lines()
+    while True:
+        try:
+            line = lines_iter.next()
+            cumulative_length = 0
+            cumul_time = 0
+            segments_iter = line.segments()
+            while True:
+                try:
+                    segment = segments_iter.next()
+                    cumulative_length += segment.link.length
+                    if segment.transit_time_func == 1:
+                        cumul_time += ( segment.data2 * segment.link.length
+                                      + segment.link["@timau"]
+                                      + segment.dwell_time)
+                    if segment.transit_time_func == 2:
+                        cumul_time += ( segment.data2 * segment.link.length
+                                      + segment.dwell_time)
+                    segment.data3 = cumul_time
+                except StopIteration:
+                    break
+        except StopIteration:
+            break
+    emme_bank.scenario(scen_id).publish_network(network)
+	# use set_attribute_values
     netw_specs = []
     netw_specs.append({
         "type": "NETWORK_CALCULATION",
@@ -91,16 +117,16 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
         "result": "ut3",
         "aggregation": None,
     })
-    netw_specs.append({
-        "type": "NETWORK_CALCULATION",
-        "selections": {
-            "link": "all",
-            "transit_line": "mode=bgde",
-        },
-        "expression": "0.1*index2",
-        "result": "us3",
-        "aggregation": None,
-    })
+    # netw_specs.append({
+        # "type": "NETWORK_CALCULATION",
+        # "selections": {
+            # "link": "all",
+            # "transit_line": "mode=bgde",
+        # },
+        # "expression": "0.1*index2",
+        # "result": "us3",
+        # "aggregation": None,
+    # })
     netcalc(netw_specs, emme_bank.scenario(scen_id))
     trass_spec = {
         "type": "EXTENDED_TRANSIT_ASSIGNMENT",
@@ -183,7 +209,10 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
                         "penalty": "ut3",
                         "perception_factor": 1
                     },
-                    "on_segments": None
+                    "on_segments": {
+                        "penalty": "us3",
+                        "perception_factor": 1
+                    }
                 },
                 "boarding_cost": {
                     "global": {
@@ -192,10 +221,7 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
                     },
                     "at_nodes": None,
                     "on_lines": None,
-                    "on_segments": {
-                        "penalty": "us3",
-                        "perception_factor": 1
-                    },                    
+                    "on_segments": None,                    
                 },
                 "waiting_time": None
             }
