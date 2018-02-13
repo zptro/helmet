@@ -7,7 +7,7 @@ emme_desktop = _app.start_dedicated(
     user_initials="HSL"
 )
 emme_modeller = _m.Modeller(emme_desktop)
-emme_bank = emme_modeller.emmebank
+emmebank = emme_modeller.emmebank
 netcalc = emme_modeller.tool(
     "inro.emme.network_calculation.network_calculator"
 )
@@ -17,7 +17,7 @@ create_matrix = emme_modeller.tool(
 transit_assignment = emme_modeller.tool(
     "inro.emme.transit_assignment.extended_transit_assignment"
 )
-mat_results = emme_modeller.tool(
+matrix_results = emme_modeller.tool(
     "inro.emme.transit_assignment.extended.matrix_results"
 )
 transit_modes = [
@@ -36,41 +36,26 @@ aux_modes = [
     'a',
     's',
 ]
-transit_assignment_modes = transit_modes + aux_modes
-transitions = []
-for mode in transit_modes:
-    transitions.append({
-        "mode": mode,
-        "next_journey_level": 1
-    })
     
 def trass_run (scen_id, demand_mat_id, result_mat_id):
-    network = emme_bank.scenario(scen_id).get_network()
-    lines_iter = network.transit_lines()
-    while True:
-        try:
-            line = lines_iter.next()
-            cumulative_length = 0
-            cumul_time = 0
-            segments_iter = line.segments()
-            while True:
-                try:
-                    segment = segments_iter.next()
-                    cumulative_length += segment.link.length
-                    if segment.transit_time_func == 1:
-                        cumul_time += ( segment.data2 * segment.link.length
-                                      + segment.link["@timau"]
-                                      + segment.dwell_time)
-                    if segment.transit_time_func == 2:
-                        cumul_time += ( segment.data2 * segment.link.length
-                                      + segment.dwell_time)
-                    segment.data3 = cumul_time
-                except StopIteration:
-                    break
-        except StopIteration:
-            break
-    emme_bank.scenario(scen_id).publish_network(network)
-	# use set_attribute_values
+    scenario = emmebank.scenario(scen_id)
+    network = scenario.get_network()
+    for line in network.transit_lines():
+        cumulative_length = 0
+        cumulative_time = 0
+        for segment in line.segments():
+            cumulative_length += segment.link.length
+            if segment.transit_time_func == 1:
+                cumulative_time += ( segment.data2 * segment.link.length
+                              + segment.link["@timau"]
+                              + segment.dwell_time)
+            if segment.transit_time_func == 2:
+                cumulative_time += ( segment.data2 * segment.link.length
+                              + segment.dwell_time)
+            segment.data3 = cumulative_time
+    scenario.publish_network(network)
+    # values = network.get_attribute_values("TRANSIT_SEGMENT", "data3")
+    # scenario.set_attribute_values("TRANSIT_SEGMENT", "data3", values)
     netw_specs = []
     netw_specs.append({
         "type": "NETWORK_CALCULATION",
@@ -127,7 +112,14 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
         # "result": "us3",
         # "aggregation": None,
     # })
-    netcalc(netw_specs, emme_bank.scenario(scen_id))
+    netcalc(netw_specs, scenario)
+    transitions = []
+    for mode in transit_modes:
+        transitions.append({
+            "mode": mode,
+            "next_journey_level": 1
+        })
+    transit_assignment_modes = transit_modes + aux_modes
     trass_spec = {
         "type": "EXTENDED_TRANSIT_ASSIGNMENT",
         "modes": transit_assignment_modes,
@@ -230,8 +222,7 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
             "number_of_processors": "max"
         },
     }
-    transit_assignment(trass_spec, emme_bank.scenario(scen_id))
-
+    transit_assignment(trass_spec, scenario)
     tottim_id = "mf" + result_mat_id + "0"
     noboa_id = "mf" + result_mat_id + "6"
     # create_matrix(matrix_id=tottim_id,
@@ -250,7 +241,7 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
             "avg_boardings": noboa_id,
         },
     }
-    mat_results(result_spec, emme_bank.scenario(scen_id))
+    matrix_results(result_spec, scenario)
     print "Transit assignment performed for scenario " + str(scen_id)
 
 trass_run(21, "mf4", "2")
