@@ -36,54 +36,70 @@ aux_modes = [
     'a',
     's',
 ]
-    
+
+# Function for performing transit assignment for one scenario    
 def trass_run (scen_id, demand_mat_id, result_mat_id):
     scenario = emmebank.scenario(scen_id)
     network = scenario.get_network()
+    
+    # Calculation of cumulative line segment travel time
     for line in network.transit_lines():
-        cumulative_length = 0
+        # cumulative_length = 0
         cumulative_time = 0
         for segment in line.segments():
-            cumulative_length += segment.link.length
+            # cumulative_length += segment.link.length
+            # Travel time for buses in mixed traffic
             if segment.transit_time_func == 1:
                 cumulative_time += ( segment.data2 * segment.link.length
-                              + segment.link["@timau"]
-                              + segment.dwell_time)
+                                   + segment.link["@timau"]
+                                   # + segment.link.auto_time
+                                   + segment.dwell_time
+				)
+            # Travel time for buses on buses lanes
             if segment.transit_time_func == 2:
                 cumulative_time += ( segment.data2 * segment.link.length
-                              + segment.dwell_time)
-            segment.data3 = cumulative_time
+                                   + segment.dwell_time
+				)
+            # The estimated waiting time deviation caused by bus travel time
+            segment.data3 = 0.044 * cumulative_time
     scenario.publish_network(network)
     # values = network.get_attribute_values("TRANSIT_SEGMENT", "data3")
     # scenario.set_attribute_values("TRANSIT_SEGMENT", "data3", values)
+    print "Cumulative travel times calculated for scenario "  + str(scen_id)
+    
+    # Definition of line specific boarding penalties
     netw_specs = []
+    # Bus
     netw_specs.append({
         "type": "NETWORK_CALCULATION",
         "selections": {
             "transit_line": "mode=b",
         },
-        "expression": "10",
+        "expression": "2",
         "result": "ut3",
         "aggregation": None,
     })
+    # Trunk bus
     netw_specs.append({
         "type": "NETWORK_CALCULATION",
         "selections": {
             "transit_line": "mode=g",
         },
-        "expression": "8",
+        "expression": "1",
         "result": "ut3",
         "aggregation": None,
     })
+    # Long-distance and express buses
     netw_specs.append({
         "type": "NETWORK_CALCULATION",
         "selections": {
             "transit_line": "mode=de",
         },
-        "expression": "10",
+        "expression": "2",
         "result": "ut3",
         "aggregation": None,
     })
+    # Train
     netw_specs.append({
         "type": "NETWORK_CALCULATION",
         "selections": {
@@ -93,6 +109,7 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
         "result": "ut3",
         "aggregation": None,
     })
+    # Metro and light rail
     netw_specs.append({
         "type": "NETWORK_CALCULATION",
         "selections": {
@@ -113,6 +130,8 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
         # "aggregation": None,
     # })
     netcalc(netw_specs, scenario)
+    
+    # Definition of transition rules: all modes are allowed
     transitions = []
     for mode in transit_modes:
         transitions.append({
@@ -120,6 +139,8 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
             "next_journey_level": 1
         })
     transit_assignment_modes = transit_modes + aux_modes
+    
+    # Specification of the transit assignment
     trass_spec = {
         "type": "EXTENDED_TRANSIT_ASSIGNMENT",
         "modes": transit_assignment_modes,
@@ -130,6 +151,8 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
             "spread_factor": 1,
             "perception_factor": 1.5
         },
+        # Boarding time is defined for each journey level separately,
+        # so here we just set the default to zero.
         "boarding_time": {
             "global": {
                 "penalty": 0,
@@ -170,6 +193,9 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
         "od_results": {
             "total_impedance": None
         },
+        # The two journey levels are identical, except that at the second
+        # level an extra boarding penalty is implemented,
+        # hence a transfer penalty. Walk only trips are not allowed.
         "journey_levels": [
             {
                 "description": "Not boarded yet",
@@ -184,7 +210,7 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
                     },
                     "on_segments": {
                         "penalty": "us3",
-                        "perception_factor": 1
+                        "perception_factor": 1.5
                     },
                 },
                 "boarding_cost": None,
@@ -203,7 +229,7 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
                     },
                     "on_segments": {
                         "penalty": "us3",
-                        "perception_factor": 1
+                        "perception_factor": 1.5
                     }
                 },
                 "boarding_cost": {
@@ -222,6 +248,7 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
             "number_of_processors": "max"
         },
     }
+    print "Transit assignment started..."
     transit_assignment(trass_spec, scenario)
     tottim_id = "mf" + result_mat_id + "0"
     noboa_id = "mf" + result_mat_id + "6"
