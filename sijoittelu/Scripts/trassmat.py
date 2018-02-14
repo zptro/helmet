@@ -250,6 +250,7 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
     }
     print "Transit assignment started..."
     transit_assignment(trass_spec, scenario)
+    
     tottim_id = "mf" + result_mat_id + "0"
     noboa_id = "mf" + result_mat_id + "6"
     # create_matrix(matrix_id=tottim_id,
