@@ -30,8 +30,8 @@ def trass_run (emme_modeller, scen_id, demand_mat_id, result_mat_id):
             # Travel time for buses in mixed traffic
             if segment.transit_time_func == 1:
                 cumulative_time += ( segment.data2 * segment.link.length
-                                   + segment.link["@timau"]
-                                   # + segment.link.auto_time
+                                   # + segment.link["@timau"]
+                                   + segment.link.auto_time
                                    + segment.dwell_time
                 )
             # Travel time for buses on bus lanes
@@ -40,7 +40,8 @@ def trass_run (emme_modeller, scen_id, demand_mat_id, result_mat_id):
                                    + segment.dwell_time
                 )
             # The estimated waiting time deviation caused by bus travel time
-            segment.data3 = 0.044 * cumulative_time
+            # segment.data3 = 0.044 * cumulative_time
+            segment["@wait_time_dev"] = 0.044 * cumulative_time
     scenario.publish_network(network)
     # values = network.get_attribute_values("TRANSIT_SEGMENT", "data3")
     # scenario.set_attribute_values("TRANSIT_SEGMENT", "data3", values)
@@ -201,7 +202,7 @@ def trass_run (emme_modeller, scen_id, demand_mat_id, result_mat_id):
                         "perception_factor": 1
                     },
                     "on_segments": {
-                        "penalty": "us3",
+                        "penalty": "@wait_time_dev",
                         "perception_factor": 1.5
                     },
                 },
@@ -220,7 +221,7 @@ def trass_run (emme_modeller, scen_id, demand_mat_id, result_mat_id):
                         "perception_factor": 1
                     },
                     "on_segments": {
-                        "penalty": "us3",
+                        "penalty": "@wait_time_dev",
                         "perception_factor": 1.5
                     }
                 },
@@ -240,11 +241,28 @@ def trass_run (emme_modeller, scen_id, demand_mat_id, result_mat_id):
             "number_of_processors": "max"
         },
     }
+    func = {
+        "type": "BPR",
+        "weight": 0.15,
+        "exponent": 4,
+        "assignment_period": 1,
+        "orig_func": False,
+        "congestion_attribute": "us3"
+    }
+    stop = {
+        "max_iterations": 10,
+        "normalized_gap": 0.01,
+        "relative_gap": 0.001
+    }
     print "Transit assignment started..."
     transit_assignment = emme_modeller.tool(
         "inro.emme.transit_assignment.extended_transit_assignment"
     )
-    transit_assignment(trass_spec, scenario)
+    congested_assignment = emme_modeller.tool(
+        "inro.emme.transit_assignment.congested_transit_assignment"
+    )
+    # transit_assignment(trass_spec, scenario)
+    congested_assignment(trass_spec, func, stop, False, scenario)
     
     tottim_id = "mf" + result_mat_id + "0"
     noboa_id = "mf" + result_mat_id + "6"
