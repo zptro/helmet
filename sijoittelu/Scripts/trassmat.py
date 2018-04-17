@@ -1,25 +1,3 @@
-import inro.emme.desktop.app as _app
-import inro.modeller as _m
-
-emme_desktop = _app.start_dedicated(
-    project="C:\Helmet\HELMET_KEHI_31\sijoittelu\sijoittelu.emp", 
-    visible=False, 
-    user_initials="HSL"
-)
-emme_modeller = _m.Modeller(emme_desktop)
-emmebank = emme_modeller.emmebank
-netcalc = emme_modeller.tool(
-    "inro.emme.network_calculation.network_calculator"
-)
-create_matrix = emme_modeller.tool(
-    "inro.emme.data.matrix.create_matrix"
-)
-transit_assignment = emme_modeller.tool(
-    "inro.emme.transit_assignment.extended_transit_assignment"
-)
-matrix_results = emme_modeller.tool(
-    "inro.emme.transit_assignment.extended.matrix_results"
-)
 transit_modes = [
     'b',
     'd',
@@ -38,7 +16,8 @@ aux_modes = [
 ]
 
 # Function for performing transit assignment for one scenario    
-def trass_run (scen_id, demand_mat_id, result_mat_id):
+def trass_run (emme_modeller, scen_id, demand_mat_id, result_mat_id):
+    emmebank = emme_modeller.emmebank
     scenario = emmebank.scenario(scen_id)
     network = scenario.get_network()
     
@@ -54,12 +33,12 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
                                    + segment.link["@timau"]
                                    # + segment.link.auto_time
                                    + segment.dwell_time
-				)
-            # Travel time for buses on buses lanes
+                )
+            # Travel time for buses on bus lanes
             if segment.transit_time_func == 2:
                 cumulative_time += ( segment.data2 * segment.link.length
                                    + segment.dwell_time
-				)
+                )
             # The estimated waiting time deviation caused by bus travel time
             segment.data3 = 0.044 * cumulative_time
     scenario.publish_network(network)
@@ -75,7 +54,7 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
         "selections": {
             "transit_line": "mode=b",
         },
-        "expression": "2",
+        "expression": "8",
         "result": "ut3",
         "aggregation": None,
     })
@@ -85,7 +64,7 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
         "selections": {
             "transit_line": "mode=g",
         },
-        "expression": "1",
+        "expression": "6",
         "result": "ut3",
         "aggregation": None,
     })
@@ -95,7 +74,7 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
         "selections": {
             "transit_line": "mode=de",
         },
-        "expression": "2",
+        "expression": "10",
         "result": "ut3",
         "aggregation": None,
     })
@@ -109,13 +88,23 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
         "result": "ut3",
         "aggregation": None,
     })
-    # Metro and light rail
+    # Metro and ferry
     netw_specs.append({
         "type": "NETWORK_CALCULATION",
         "selections": {
-            "transit_line": "mode=mtpw",
+            "transit_line": "mode=mw",
         },
         "expression": "0",
+        "result": "ut3",
+        "aggregation": None,
+    })
+    # Tram and light rail
+    netw_specs.append({
+        "type": "NETWORK_CALCULATION",
+        "selections": {
+            "transit_line": "mode=tp",
+        },
+        "expression": "1",
         "result": "ut3",
         "aggregation": None,
     })
@@ -129,6 +118,9 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
         # "result": "us3",
         # "aggregation": None,
     # })
+    netcalc = emme_modeller.tool(
+        "inro.emme.network_calculation.network_calculator"
+    )
     netcalc(netw_specs, scenario)
     
     # Definition of transition rules: all modes are allowed
@@ -149,7 +141,7 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
             "headway_fraction": 0.5,
             "effective_headways": "hdw",
             "spread_factor": 1,
-            "perception_factor": 1.5
+            "perception_factor": 2.5
         },
         # Boarding time is defined for each journey level separately,
         # so here we just set the default to zero.
@@ -176,7 +168,7 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
         },
         "in_vehicle_cost": None,
         "aux_transit_time": {
-            "perception_factor": 1.5
+            "perception_factor": 1.7
         },
         "aux_transit_cost": None,
         "flow_distribution_at_origins": {
@@ -234,7 +226,7 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
                 },
                 "boarding_cost": {
                     "global": {
-                        "penalty": 3,
+                        "penalty": 5,
                         "perception_factor": 1,
                     },
                     "at_nodes": None,
@@ -249,10 +241,16 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
         },
     }
     print "Transit assignment started..."
+    transit_assignment = emme_modeller.tool(
+        "inro.emme.transit_assignment.extended_transit_assignment"
+    )
     transit_assignment(trass_spec, scenario)
     
     tottim_id = "mf" + result_mat_id + "0"
     noboa_id = "mf" + result_mat_id + "6"
+    create_matrix = emme_modeller.tool(
+        "inro.emme.data.matrix.create_matrix"
+    )
     # create_matrix(matrix_id=tottim_id,
                   # matrix_name="tottim",
                   # matrix_description="total time s= ah,tayd",
@@ -269,9 +267,8 @@ def trass_run (scen_id, demand_mat_id, result_mat_id):
             "avg_boardings": noboa_id,
         },
     }
+    matrix_results = emme_modeller.tool(
+        "inro.emme.transit_assignment.extended.matrix_results"
+    )
     matrix_results(result_spec, scenario)
     print "Transit assignment performed for scenario " + str(scen_id)
-
-trass_run(21, "mf4", "2")
-trass_run(22, "mf6", "3")
-trass_run(23, "mf5", "4")
