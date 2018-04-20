@@ -16,7 +16,7 @@ aux_modes = [
 ]
     
 def trass_run (emme_modeller, scen_id, demand_mat_id, result_mat_id):
-	"""Perform transit assignment for one scenario."""
+    """Perform transit assignment for one scenario."""
     emmebank = emme_modeller.emmebank
     scenario = emmebank.scenario(scen_id)
     network = scenario.get_network()
@@ -39,7 +39,28 @@ def trass_run (emme_modeller, scen_id, demand_mat_id, result_mat_id):
                 cumulative_time += ( segment.data2 * segment.link.length
                                    + segment.dwell_time
                 )
-            # The estimated waiting time deviation caused by bus travel time
+            # Travel time for trams AHT
+            if segment.transit_time_func == 3:
+                cumulative_time += ( segment.link.length
+                                   / int(str(segment.link.data1)[0:1])
+                                   * 60
+                                   + segment.dwell_time
+                )
+            # Travel time for trams PT
+            if segment.transit_time_func == 4:
+                cumulative_time += ( segment.link.length
+                                   / int(str(segment.link.data1)[2:3])
+                                   * 60
+                                   + segment.dwell_time
+                )
+            # Travel time for trams IHT
+            if segment.transit_time_func == 5:
+                cumulative_time += ( segment.link.length
+                                   / int(str(segment.link.data1)[4:5])
+                                   * 60
+                                   + segment.dwell_time
+                )
+            # The estimated waiting time deviation caused by travel time
             # segment.data3 = 0.044 * cumulative_time
             segment["@wait_time_dev"] = 0.044 * cumulative_time
     scenario.publish_network(network)
@@ -105,7 +126,7 @@ def trass_run (emme_modeller, scen_id, demand_mat_id, result_mat_id):
         "selections": {
             "transit_line": "mode=tp",
         },
-        "expression": "1",
+        "expression": "0",
         "result": "ut3",
         "aggregation": None,
     })
