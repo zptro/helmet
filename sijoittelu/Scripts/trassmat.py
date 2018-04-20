@@ -41,22 +41,37 @@ def trass_run (emme_modeller, scen_id, demand_mat_id, result_mat_id):
                 )
             # Travel time for trams AHT
             if segment.transit_time_func == 3:
+                speedstr = str(segment.link.data1)
+                if len(speedstr) < 8:
+                    speed = int(speedstr[0])
+                else:
+                    speed = int(speedstr[0:2])
                 cumulative_time += ( segment.link.length
-                                   / int(str(segment.link.data1)[0:1])
+                                   / speed
                                    * 60
                                    + segment.dwell_time
                 )
             # Travel time for trams PT
             if segment.transit_time_func == 4:
+                speedstr = str(segment.link.data1)
+                if len(speedstr) < 8:
+                    speed = int(speedstr[1:3])
+                else:
+                    speed = int(speedstr[2:4])
                 cumulative_time += ( segment.link.length
-                                   / int(str(segment.link.data1)[2:3])
+                                   / speed
                                    * 60
                                    + segment.dwell_time
                 )
             # Travel time for trams IHT
             if segment.transit_time_func == 5:
+                speedstr = str(segment.link.data1)
+                if len(speedstr) < 8:
+                    speed = int(speedstr[3:5])
+                else:
+                    speed = int(speedstr[4:6])
                 cumulative_time += ( segment.link.length
-                                   / int(str(segment.link.data1)[4:5])
+                                   / speed
                                    * 60
                                    + segment.dwell_time
                 )
@@ -67,7 +82,6 @@ def trass_run (emme_modeller, scen_id, demand_mat_id, result_mat_id):
     # values = network.get_attribute_values("TRANSIT_SEGMENT", "data3")
     # scenario.set_attribute_values("TRANSIT_SEGMENT", "data3", values)
     print "Cumulative travel times calculated for scenario "  + str(scen_id)
-    
     # Definition of line specific boarding penalties
     netw_specs = []
     # Bus
@@ -224,7 +238,7 @@ def trass_run (emme_modeller, scen_id, demand_mat_id, result_mat_id):
                     },
                     "on_segments": {
                         "penalty": "@wait_time_dev",
-                        "perception_factor": 1.5
+                        "perception_factor": 2.5
                     },
                 },
                 "boarding_cost": None,
@@ -243,7 +257,7 @@ def trass_run (emme_modeller, scen_id, demand_mat_id, result_mat_id):
                     },
                     "on_segments": {
                         "penalty": "@wait_time_dev",
-                        "perception_factor": 1.5
+                        "perception_factor": 2.5
                     }
                 },
                 "boarding_cost": {
@@ -267,13 +281,13 @@ def trass_run (emme_modeller, scen_id, demand_mat_id, result_mat_id):
         "weight": 0.62,
         "exponent": 2,
         "assignment_period": 1,
-        "orig_func": False,
+        "orig_func": True,
         "congestion_attribute": "us3",
     }
     # func = {
         # "type": "CUSTOM",
         # "assignment_period": 1,
-        # "orig_func": False,
+        # "orig_func": True,
         # "congestion_attribute": "us3",
         # "python_function": """def calc_segment_cost(transit_volume, capacity, segment):
                                 # return 0.62 * ((transit_volume / capacity) ** 4)"""
