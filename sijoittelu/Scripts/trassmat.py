@@ -14,9 +14,9 @@ aux_modes = [
     'a',
     's',
 ]
-
-# Function for performing transit assignment for one scenario    
+    
 def trass_run (emme_modeller, scen_id, demand_mat_id, result_mat_id):
+	"""Perform transit assignment for one scenario."""
     emmebank = emme_modeller.emmebank
     scenario = emmebank.scenario(scen_id)
     network = scenario.get_network()
@@ -243,12 +243,20 @@ def trass_run (emme_modeller, scen_id, demand_mat_id, result_mat_id):
     }
     func = {
         "type": "BPR",
-        "weight": 0.15,
-        "exponent": 4,
+        "weight": 0.62,
+        "exponent": 2,
         "assignment_period": 1,
         "orig_func": False,
-        "congestion_attribute": "us3"
+        "congestion_attribute": "us3",
     }
+    # func = {
+        # "type": "CUSTOM",
+        # "assignment_period": 1,
+        # "orig_func": False,
+        # "congestion_attribute": "us3",
+        # "python_function": """def calc_segment_cost(transit_volume, capacity, segment):
+                                # return 0.62 * ((transit_volume / capacity) ** 4)"""
+    # }
     stop = {
         "max_iterations": 10,
         "normalized_gap": 0.01,
@@ -262,7 +270,12 @@ def trass_run (emme_modeller, scen_id, demand_mat_id, result_mat_id):
         "inro.emme.transit_assignment.congested_transit_assignment"
     )
     # transit_assignment(trass_spec, scenario)
-    congested_assignment(trass_spec, func, stop, False, scenario)
+    congested_assignment(transit_assignment_spec=trass_spec, 
+                         congestion_function=func,
+                         stopping_criteria=stop, 
+                         log_worksheets=False, 
+                         scenario=scenario,
+    )
     
     tottim_id = "mf" + result_mat_id + "0"
     noboa_id = "mf" + result_mat_id + "6"

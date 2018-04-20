@@ -26,7 +26,10 @@
 *.omx
 *.in
 *.gfsum
+*.old
 usemacro_*
+STRAT_*
+config
 AJA_HM30.bat
 aja_vastus.bat
 copy_input_data_HM30.bat
