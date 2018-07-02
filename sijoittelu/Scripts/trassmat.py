@@ -278,7 +278,7 @@ def trass_run (emme_modeller, scen_id, demand_mat_id, result_mat_id):
     }
     func = {
         "type": "BPR",
-        "weight": 0.62,
+        "weight": 0.53,
         "exponent": 2,
         "assignment_period": 1,
         "orig_func": True,
@@ -290,7 +290,7 @@ def trass_run (emme_modeller, scen_id, demand_mat_id, result_mat_id):
         # "orig_func": True,
         # "congestion_attribute": "us3",
         # "python_function": """def calc_segment_cost(transit_volume, capacity, segment):
-                                # return 0.62 * ((transit_volume / capacity) ** 4)"""
+                                # return 0.53 * ((transit_volume / capacity) ** 2)"""
     # }
     stop = {
         "max_iterations": 10,
@@ -313,24 +313,60 @@ def trass_run (emme_modeller, scen_id, demand_mat_id, result_mat_id):
     )
     
     tottim_id = "mf" + result_mat_id + "0"
+    inveht_id = "mf" + result_mat_id + "1"
+    auxtim_id = "mf" + result_mat_id + "2"
+    twtime_id = "mf" + result_mat_id + "3"
+    fwtime_id = "mf" + result_mat_id + "4"
+    boatim_id = "mf" + result_mat_id + "5"
     noboa_id = "mf" + result_mat_id + "6"
+    invlen_id = "mf" + result_mat_id + "7"
     create_matrix = emme_modeller.tool(
         "inro.emme.data.matrix.create_matrix"
     )
     # create_matrix(matrix_id=tottim_id,
                   # matrix_name="tottim",
-                  # matrix_description="total time s= ah,tayd",
+                  # matrix_description="total time s="+str(scen_id),
+                  # default_value=0)
+    # create_matrix(matrix_id=inveht_id,
+                  # matrix_name="inveht",
+                  # matrix_description="in veh time s="+str(scen_id),
+                  # default_value=0)
+    # create_matrix(matrix_id=auxtim_id,
+                  # matrix_name="auxtim",
+                  # matrix_description="aux time s="+str(scen_id),
+                  # default_value=0)
+    # create_matrix(matrix_id=twtime_id,
+                  # matrix_name="twtime",
+                  # matrix_description="tot wait time s="+str(scen_id),
+                  # default_value=0)
+    # create_matrix(matrix_id=fwtime_id,
+                  # matrix_name="fwtime",
+                  # matrix_description="first wait time s="+str(scen_id),
+                  # default_value=0)
+    # create_matrix(matrix_id=boatim_id,
+                  # matrix_name="boatim",
+                  # matrix_description="board time s="+str(scen_id),
                   # default_value=0)
     # create_matrix(matrix_id=noboa_id,
                   # matrix_name="noboa",
-                  # matrix_description="no of board s= ah,tayd",
+                  # matrix_description="no of board s="+str(scen_id),
+                  # default_value=0)
+    # create_matrix(matrix_id=invlen_id,
+                  # matrix_name="invlen",
+                  # matrix_description="in veh lenght s="+str(scen_id),
                   # default_value=0)
     result_spec = {
         "type": "EXTENDED_TRANSIT_MATRIX_RESULTS",
         "total_impedance": tottim_id,
+        "actual_first_waiting_times": fwtime_id,
+        "actual_total_waiting_times": twtime_id,
         "by_mode_subset": {
             "modes": transit_modes,
+            "distance": invlen_id,
             "avg_boardings": noboa_id,
+            "actual_total_boarding_times": boatim_id,
+            "actual_in_vehicle_times": inveht_id,
+            "actual_aux_transit_times": auxtim_id,
         },
     }
     matrix_results = emme_modeller.tool(

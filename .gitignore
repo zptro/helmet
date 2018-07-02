@@ -3,6 +3,7 @@
 *.xls
 *.xlsx
 *.txt
+*.csv
 *.png
 *.pdf
 *.emlk
@@ -235,3 +236,5 @@ sijoittelu/database/STRAT_s21
 sijoittelu/database/STRAT_s22
 sijoittelu/database/STRAT_s23
 sijoittelu/database/usemacro_12844
+sijoittelu/Logbook/project.mlbk-shm
+sijoittelu/Logbook/project.mlbk-wal
