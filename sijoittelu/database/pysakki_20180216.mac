@@ -16,6 +16,8 @@
 ~#                (btpgde), ei junilla (rj) ja metrolla (m)                    #
 ~#     muokattu 10.1.2017 WSP/ARa                                              #
 ~#              - yhdistetty HSL:n ja WSP:n aiemmat muokkaukset samaan makroon #
+~#     muokattu 16.2.2018 HSL/JW                                               #
+~#              - lisatty pikavuoropysakki u2=7                                #
 ~#                                                                             #
 ~###############################################################################
 ~#
@@ -26,6 +28,7 @@
 ~# ui2=3, bussipysäkki paikallis- ja runkoliikenne
 ~# ui2=4, bussipysäkki paikallis- ja pikavuoroliikenne
 ~# ui2=5, bussipysäkki paikallis, runko- ja pikavuoroliikenne
+~# ui2=7, bussipysäkki pikavuoro- ja valluliikenne
 ~# ui2=11, bussiterminaali (kaikki linjat)
 ~#
 ~# ui3-kentässä tulee olla tieto kunnasta

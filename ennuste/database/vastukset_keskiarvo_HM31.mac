@@ -1,0 +1,758 @@
+~# ***********************************************************************
+~# ***                      HELMET-liikennemalli                       ***
+~# ***                  vastukset_keskiarvo_2.mac                      ***
+~# ***                 WSP Finland, ARa 2010-03-10                     ***
+~# ***                 Strafica, ARa 2013-09-27 (liukuva ka)           ***
+~# ***********************************************************************
+~#
+~# Talla makrolla lasketaan vastuksiksi kaikkien edellisten kierrosten
+~# vastusten LIUKUVA keskiarvo.
+~#
+~# Sita varten pitaa olla sisaan ajettuna uudet vastukset (A) (sijoittelu-
+~# pankista (mf10-18, mf28-30, mf34, makrolla vastukset_sisaan.mac), ja
+~# ja niita vastaavat edellisten kierrosten vastukset (A*-1) tallessa
+~# (mf201-213, ensimmaisella kierroksella ajettava vastukset_kop.mac, 
+~# sen jalkeen tama makro hoitaa asian).
+~# 
+~# Keskiarvoiset vastukset (A*) lasketaan uusien vastusten (A) tilalle, 
+~# siis paikkoihin mf10-18, mf28-30, mf34, 
+~# ja samalla nama uudet keskiarvovastukset (A*) kopioidaan
+~# seuraavaa kierrosta varten talteen kohtiin (mf201-213).
+~# 
+~#
+~# Makron ajaminen
+~# ~<vastukset_keskiarvo_2.mac
+~# 
+~#
+~# 
+~# Lahtotietomatriisit	
+~#  Uudet, sijoittelupankista tuodut vastukset
+~# 					AH	IH	PA	
+~#  matka-aika HA			mf10	mf11	mf12
+~#  matkan pituus HA 			mf13	mf14	mf15	
+~#  matka-aika JL (painotettu)		mf16	mf17	mf18
+~#  nousumaara JL 			mf28	mf29	mf30	
+~#  valinepituus KL			mf34	SAMA	SAMA
+~#
+~#  Edelliselta kierrokselta talteen otetut vastukset
+~# 					AH	IH	PA
+~#  matka-aika HA			mf201	mf202	mf203
+~#  matkan pituus HA 			mf204	mf205	mf206	
+~#  painotettu matka-aika JL		mf207	mf208	mf209
+~#  nousumaara JL 			mf210	mf211   mf212	
+~#  valinepituus KL			mf213	SAMA	SAMA
+~#
+~# Valitulosmatriisit
+~#  Apumatriisi 			mf251
+~# 
+~#
+~#
+~# *** HA KOKO AIKA, 3 matriisia ***
+~# *** AH ***
+~#
+~# *** Tuhotaan valitulosmatriisi
+3.11
+~?e
+d311_del_valitulos_vastus_ka.in
+~?q=2
+2
+~# *** Kopioidaan uusi vastus turvaan valitulosmatriisiin ****************
+~#
+3.21
+1
+y
+mf251
+y
+HAAHAI
+HA AH KOKO_AIKA SIJ TULLUT  
+0
+mf10
+
+
+n
+~?b=1
+2
+~# *** Keskiarvo uudesta ja vanhasta ***
+1
+y
+mf10
+y
+HAAHAI
+HA AH KOKO_AIKA KESKIARVO  
+n
+(mf251+(%1%-3)*mf201)/(%1%-2)
+
+
+n
+~?b=1
+2
+~# *** Vanha valitulosmatriisista talteen ***
+1
+y
+mf201
+y
+HAAHAI
+HA AH KOKO_AIKA SIJ TULLUT
+y
+0
+mf10
+
+
+n
+~?b=1
+2
+q
+~# *** IH ***
+~# *** Tuhotaan valitulosmatriisi
+3.11
+~?e
+d311_del_valitulos_vastus_ka.in
+~?q=2
+2
+~# *** Kopioidaan uusi vastus turvaan valitulosmatriisiin ****************
+~#
+3.21
+1
+y
+mf251
+y
+HAIHAI
+HA IH KOKO_AIKA SIJ TULLUT  
+0
+mf11
+
+
+n
+~?b=1
+2
+~# *** Keskiarvo uudesta ja vanhasta ***
+1
+y
+mf11
+y
+HAIHAI
+HA IH KOKO_AIKA KESKIARVO  
+n
+(mf251+(%1%-3)*mf202)/(%1%-2)
+
+
+n
+~?b=1
+2
+~# *** Vanha valitulosmatriisista talteen ***
+1
+y
+mf202
+y
+HAIHAI
+HA IH KOKO_AIKA SIJ TULLUT
+y
+0
+mf11
+
+
+n
+~?b=1
+2
+q
+~# 
+~# *** PA ***
+~# *** Tuhotaan valitulosmatriisi
+3.11
+~?e
+d311_del_valitulos_vastus_ka.in
+~?q=2
+2
+~# *** Kopioidaan uusi vastus turvaan valitulosmatriisiin ****************
+~#
+3.21
+1
+y
+mf251
+y
+HAPAAI
+HA PA KOKO_AIKA SIJ TULLUT  
+0
+mf12
+
+
+n
+~?b=1
+2
+~# *** Keskiarvo uudesta ja vanhasta ***
+1
+y
+mf12
+y
+HAPAAI
+HA PA KOKO_AIKA KESKIARVO  
+n
+(mf251+(%1%-3)*mf203)/(%1%-2)
+
+
+n
+~?b=1
+2
+~# *** Vanha valitulosmatriisista talteen ***
+1
+y
+mf203
+y
+HAPAAI
+HA PA KOKO_AIKA SIJ TULLUT
+y
+0
+mf12
+
+
+n
+~?b=1
+2
+q
+~# 
+~# 
+~# *** HA VALINEPITUUS, 3 matriisia ***
+~# *** AH ***
+~#
+~# *** Tuhotaan valitulosmatriisi
+3.11
+~?e
+d311_del_valitulos_vastus_ka.in
+~?q=2
+2
+~# *** Kopioidaan uusi vastus turvaan valitulosmatriisiin ****************
+~#
+3.21
+1
+y
+mf251
+y
+HAAHPI
+HA AH VALINE_PITUUS SIJ TULLUT  
+0
+mf13
+
+
+n
+~?b=1
+2
+~# *** Keskiarvo uudesta ja vanhasta ***
+1
+y
+mf13
+y
+HAAHPI
+HA AH VALINE_PITUUS KESKIARVO  
+n
+(mf251+(%1%-3)*mf204)/(%1%-2)
+
+
+n
+~?b=1
+2
+~# *** Vanha valitulosmatriisista talteen ***
+1
+y
+mf204
+y
+HAAHPI
+HA AH VALINE_PITUUS SIJ TULLUT
+y
+0
+mf13
+
+
+n
+~?b=1
+2
+q
+~# *** IH ***
+~#
+~# *** Tuhotaan valitulosmatriisi
+3.11
+~?e
+d311_del_valitulos_vastus_ka.in
+~?q=2
+2
+~# *** Kopioidaan uusi vastus turvaan valitulosmatriisiin ****************
+~#
+3.21
+1
+y
+mf251
+y
+HAIHPI
+HA IH VALINE_PITUUS SIJ TULLUT  
+0
+mf14
+
+
+n
+~?b=1
+2
+~# *** Keskiarvo uudesta ja vanhasta ***
+1
+y
+mf14
+y
+HAIHPI
+HA IH VALINE_PITUUS KESKIARVO  
+n
+(mf251+(%1%-3)*mf205)/(%1%-2)
+
+
+n
+~?b=1
+2
+~# *** Vanha valitulosmatriisista talteen ***
+1
+y
+mf205
+y
+HAIHPI
+HA IH VALINE_PITUUS SIJ TULLUT
+y
+0
+mf14
+
+
+n
+~?b=1
+2
+q
+~# *** PA ***
+~#
+~# *** Tuhotaan valitulosmatriisi
+3.11
+~?e
+d311_del_valitulos_vastus_ka.in
+~?q=2
+2
+~# *** Kopioidaan uusi vastus turvaan valitulosmatriisiin ****************
+~#
+3.21
+1
+y
+mf251
+y
+HAPAPI
+HA PA VALINE_PITUUS SIJ TULLUT  
+0
+mf15
+
+
+n
+~?b=1
+2
+~# *** Keskiarvo uudesta ja vanhasta ***
+1
+y
+mf15
+y
+HAPAPI
+HA PA VALINE_PITUUS KESKIARVO  
+n
+(mf251+(%1%-3)*mf206)/(%1%-2)
+
+
+n
+~?b=1
+2
+~# *** Vanha valitulosmatriisista talteen ***
+1
+y
+mf206
+y
+HAPAPI
+HA PA VALINE_PITUUS SIJ TULLUT
+y
+0
+mf15
+
+
+n
+~?b=1
+2
+q
+~# *** JL KOKO AIKA, painotettu, 3 matriisia ***
+~# *** AH ***
+~#
+~# *** Tuhotaan valitulosmatriisi
+3.11
+~?e
+d311_del_valitulos_vastus_ka.in
+~?q=2
+2
+~# *** Kopioidaan uusi vastus turvaan valitulosmatriisiin ****************
+~#
+3.21
+1
+y
+mf251
+y
+JLAHKA
+JL AH KOKO_AIKA SIJ TULLUT  
+0
+mf16
+
+
+n
+~?b=1
+2
+~# *** Keskiarvo uudesta ja vanhasta ***
+1
+y
+mf16
+y
+JLAHKA
+JL AH KOKO_AIKA KESKIARVO  
+n
+(mf251+(%1%-3)*mf207)/(%1%-2)
+
+
+n
+~?b=1
+2
+~# *** Vanha valitulosmatriisista talteen ***
+1
+y
+mf207
+y
+JLAHKA
+JL AH KOKO_AIKA SIJ TULLUT
+y
+0
+mf16
+
+
+n
+~?b=1
+2
+q
+~# *** IH ***
+~#
+~# *** Tuhotaan valitulosmatriisi
+3.11
+~?e
+d311_del_valitulos_vastus_ka.in
+~?q=2
+2
+~# *** Kopioidaan uusi vastus turvaan valitulosmatriisiin ****************
+~#
+3.21
+1
+y
+mf251
+y
+JLIHKA
+JL IH KOKO_AIKA SIJ TULLUT  
+0
+mf17
+
+
+n
+~?b=1
+2
+~# *** Keskiarvo uudesta ja vanhasta ***
+1
+y
+mf17
+y
+JLIHKA
+JL IH KOKO_AIKA KESKIARVO  
+n
+(mf251+(%1%-3)*mf208)/(%1%-2)
+
+
+n
+~?b=1
+2
+~# *** Vanha valitulosmatriisista talteen ***
+1
+y
+mf208
+y
+JLIHKA
+JL IH KOKO_AIKA SIJ TULLUT
+y
+0
+mf17
+
+
+n
+~?b=1
+2
+q
+~# *** PA ***
+~#
+~# *** Tuhotaan valitulosmatriisi
+3.11
+~?e
+d311_del_valitulos_vastus_ka.in
+~?q=2
+2
+~# *** Kopioidaan uusi vastus turvaan valitulosmatriisiin ****************
+~#
+3.21
+1
+y
+mf251
+y
+JLPAKA
+JL PA KOKO_AIKA SIJ TULLUT  
+0
+mf18
+
+
+n
+~?b=1
+2
+~# *** Keskiarvo uudesta ja vanhasta ***
+1
+y
+mf18
+y
+JLPAKA
+JL PA KOKO_AIKA KESKIARVO  
+n
+(mf251+(%1%-3)*mf209)/(%1%-2)
+
+
+n
+~?b=1
+2
+~# *** Vanha valitulosmatriisista talteen ***
+1
+y
+mf209
+y
+JLPAKA
+JL PA KOKO_AIKA SIJ TULLUT
+y
+0
+mf18
+
+
+n
+~?b=1
+2
+q
+~# *** JL NOUSUMAARA, 3 matriisia ***
+~# *** AH ***
+~#
+~# *** Tuhotaan valitulosmatriisi
+3.11
+~?e
+d311_del_valitulos_vastus_ka.in
+~?q=2
+2
+~# *** Kopioidaan uusi vastus turvaan valitulosmatriisiin ****************
+~#
+3.21
+1
+y
+mf251
+y
+JLAHNM
+JL AH NOUSU_MAARA SIJ TULLUT  
+0
+mf28
+
+
+n
+~?b=1
+2
+~# *** Keskiarvo uudesta ja vanhasta ***
+1
+y
+mf28
+y
+JLAHNM
+JL AH NOUSU_MAARA KESKIARVO  
+n
+(mf251+(%1%-3)*mf210)/(%1%-2)
+
+
+n
+~?b=1
+2
+~# *** Vanha valitulosmatriisista talteen ***
+1
+y
+mf210
+y
+JLAHNM
+JL AH NOUSU_MAARA SIJ TULLUT
+y
+0
+mf28
+
+
+n
+~?b=1
+2
+q
+~# *** IH ***
+~#
+~# *** Tuhotaan valitulosmatriisi
+3.11
+~?e
+d311_del_valitulos_vastus_ka.in
+~?q=2
+2
+~# *** Kopioidaan uusi vastus turvaan valitulosmatriisiin ****************
+~#
+3.21
+1
+y
+mf251
+y
+JLIHNM
+JL IH NOUSU_MAARA SIJ TULLUT  
+0
+mf29
+
+
+n
+~?b=1
+2
+~# *** Keskiarvo uudesta ja vanhasta ***
+1
+y
+mf29
+y
+JLIHNM
+JL IH NOUSU_MAARA KESKIARVO  
+n
+(mf251+(%1%-3)*mf211)/(%1%-2)
+
+
+n
+~?b=1
+2
+~# *** Vanha valitulosmatriisista talteen ***
+1
+y
+mf211
+y
+JLIHNM
+JL IH NOUSU_MAARA SIJ TULLUT
+y
+0
+mf29
+
+
+n
+~?b=1
+2
+q
+~# *** PA ***
+~#
+~# *** Tuhotaan valitulosmatriisi
+3.11
+~?e
+d311_del_valitulos_vastus_ka.in
+~?q=2
+2
+~# *** Kopioidaan uusi vastus turvaan valitulosmatriisiin ****************
+~#
+3.21
+1
+y
+mf251
+y
+JLPANM
+JL PA NOUSU_MAARA SIJ TULLUT  
+0
+mf30
+
+
+n
+~?b=1
+2
+~# *** Keskiarvo uudesta ja vanhasta ***
+1
+y
+mf30
+y
+JLPANM
+JL PA NOUSU_MAARA KESKIARVO  
+n
+(mf251+(%1%-3)*mf212)/(%1%-2)
+
+
+n
+~?b=1
+2
+~# *** Vanha valitulosmatriisista talteen ***
+1
+y
+mf212
+y
+JLPANM
+JL PA NOUSU_MAARA SIJ TULLUT
+y
+0
+mf30
+
+
+n
+~?b=1
+2
+q
+~# *** KL vALINEPITUUS, 1 matriisi ***
+~#
+~# *** Tuhotaan valitulosmatriisi
+3.11
+~?e
+d311_del_valitulos_vastus_ka.in
+~?q=2
+2
+~# *** Kopioidaan uusi vastus turvaan valitulosmatriisiin ****************
+~#
+3.21
+1
+y
+mf251
+y
+KEVP
+KL VALINEPITUUS SIJ TULLUT  
+0
+mf34
+
+
+n
+~?b=1
+2
+~# *** Keskiarvo uudesta ja vanhasta ***
+1
+y
+mf34
+y
+KEVP
+KL VALINEPITUUS KESKIARVO  
+n
+(mf251+(%1%-3)*mf213)/(%1%-2)
+
+
+n
+~?b=1
+2
+~# *** Vanha valitulosmatriisista talteen ***
+1
+y
+mf213
+y
+KEVP
+KL VALINEPITUUS SIJ TULLUT
+y
+0
+mf34
+
+
+n
+~?b=1
+2
+q
+~/ Makro vastukset_keskiarvo_2.mac (keskiarvojen laskeminen) on ajettu
+~#

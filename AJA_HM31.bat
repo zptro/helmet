@@ -118,7 +118,7 @@ Emme -ng -m import.mac %SIJOITTELUFOLDER% mf51  mf53
 Emme -ng -m import.mac %SIJOITTELUFOLDER% mf398 mf400
 @REM
 @rem Kaynnistetaan Emme ennustepankissa suoraan makroon, joka tekee kaiken tarvittavan
-Emme -ng -m cmd-makro_enn_HM30_ka.mac %%X  %2
+Emme -ng -m cmd-makro_enn_HM31_ka.mac %%X  %2
 @rem
 date /t >> bat_loki_ka.txt
 time /t >> bat_loki_ka.txt
