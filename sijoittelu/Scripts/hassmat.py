@@ -1,19 +1,27 @@
-def hass_run (emme_modeller, scen_id, demand_mat_id, time_mat_id, length_mat_id, cost_mat_id):
-    """Perform car assignment for one scenario."""
+length_weight = 0.2
+
+def traffic_ass (emme_modeller, scen_id, demand_mat_id, 
+              time_mat_id, length_mat_id, cost_mat_id):
+    """Perform car traffic assignment for one scenario."""
     emmebank = emme_modeller.emmebank
     scenario = emmebank.scenario(scen_id)
-    # create_matrix(matrix_id=time_mat_id,
-                  # matrix_name="hatim",
-                  # matrix_description="ha-aikamatr s="+str(scen_id),
-                  # default_value=0)
-    # create_matrix(matrix_id=length_mat_id,
-                  # matrix_name="halen",
-                  # matrix_description="ha-pituusmatr s="+str(scen_id),
-                  # default_value=0)
-    # create_matrix(matrix_id=cost_mat_id,
-                  # matrix_name="ruma",
-                  # matrix_description="ruuhkamaksumatr s="+str(scen_id),
-                  # default_value=0)
+    create_matrix = emme_modeller.tool(
+        "inro.emme.data.matrix.create_matrix")
+    create_matrix(matrix_id=time_mat_id,
+                  matrix_name="hatim",
+                  matrix_description="ha-aikamatr s="+str(scen_id),
+                  default_value=0,
+                  overwrite=True)
+    create_matrix(matrix_id=length_mat_id,
+                  matrix_name="halen",
+                  matrix_description="ha-pituusmatr s="+str(scen_id),
+                  default_value=0,
+                  overwrite=True)
+    create_matrix(matrix_id=cost_mat_id,
+                  matrix_name="ruma",
+                  matrix_description="ruuhkamaksumatr s="+str(scen_id),
+                  default_value=0,
+                  overwrite=True)
     spec = {
         "type": "SOLA_TRAFFIC_ASSIGNMENT",
         "classes": [
@@ -22,7 +30,7 @@ def hass_run (emme_modeller, scen_id, demand_mat_id, time_mat_id, length_mat_id,
                 "demand": demand_mat_id,
                 "generalized_cost": {
                     "link_costs": "@rumsi",
-                    "perception_factor": 0.2
+                    "perception_factor": length_weight
                 },
                 "results": {
                     "link_volumes": None,
@@ -87,18 +95,22 @@ def hass_run (emme_modeller, scen_id, demand_mat_id, time_mat_id, length_mat_id,
             "max_iterations": 100,
             "relative_gap": 0.0001,
             "best_relative_gap": 0.01,
-            "normalized_gap": 0.005
+            "normalized_gap": 0.005,
         }
     }
     print "Traffic assignment started..."
     car_assignment = emme_modeller.tool(
-        "inro.emme.traffic_assignment.sola_traffic_assignment"
-    )
+        "inro.emme.traffic_assignment.sola_traffic_assignment")
     car_assignment(spec, scenario)
     print "Traffic assignment performed for scenario " + str(scen_id)
+	
+	# Traffic assignment produces a generalize cost matrix.
+	# To get travel time, monetary cost is removed from general cost.
     matrix_spec = {
         "type": "MATRIX_CALCULATION",
-        "expression": time_mat_id+"-0.2*"+length_mat_id+"-6*"+cost_mat_id,
+        "expression": time_mat_id
+                      +"-"+str(length_weight)+"*"+length_mat_id
+                      +"-"+"6"+"*"+cost_mat_id,
         "result": time_mat_id,
         "constraint": {
             "by_value": None,
@@ -110,7 +122,6 @@ def hass_run (emme_modeller, scen_id, demand_mat_id, time_mat_id, length_mat_id,
         },
     }
     matcalc = emme_modeller.tool(
-        "inro.emme.matrix_calculation.matrix_calculator"
-    )
+        "inro.emme.matrix_calculation.matrix_calculator")
     matcalc(matrix_spec, scenario)
-	print "Generalized cost transformed to time"
+    print "Generalized cost transformed to time"

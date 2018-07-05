@@ -9,4 +9,4 @@ emme_desktop = _app.start_dedicated(
 )
 emme_modeller = _m.Modeller(emme_desktop)
 
-hassmat.hass_run(emme_modeller, 21, "mf1", "mf380", "mf381", "mf370")
+hassmat.traffic_ass(emme_modeller, 21, "mf1", "mf380", "mf381", "mf370")

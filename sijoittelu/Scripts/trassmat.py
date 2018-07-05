@@ -15,7 +15,7 @@ aux_modes = [
     's',
 ]
     
-def trass_run (emme_modeller, scen_id, demand_mat_id, result_mat_id):
+def transit_ass (emme_modeller, scen_id, demand_mat_id, result_mat_id):
     """Perform transit assignment for one scenario."""
     emmebank = emme_modeller.emmebank
     scenario = emmebank.scenario(scen_id)
@@ -155,8 +155,7 @@ def trass_run (emme_modeller, scen_id, demand_mat_id, result_mat_id):
         # "aggregation": None,
     # })
     netcalc = emme_modeller.tool(
-        "inro.emme.network_calculation.network_calculator"
-    )
+        "inro.emme.network_calculation.network_calculator")
     netcalc(netw_specs, scenario)
     
     # Definition of transition rules: all modes are allowed
@@ -299,11 +298,9 @@ def trass_run (emme_modeller, scen_id, demand_mat_id, result_mat_id):
     }
     print "Transit assignment started..."
     transit_assignment = emme_modeller.tool(
-        "inro.emme.transit_assignment.extended_transit_assignment"
-    )
+        "inro.emme.transit_assignment.extended_transit_assignment")
     congested_assignment = emme_modeller.tool(
-        "inro.emme.transit_assignment.congested_transit_assignment"
-    )
+        "inro.emme.transit_assignment.congested_transit_assignment")
     # transit_assignment(trass_spec, scenario)
     congested_assignment(transit_assignment_spec=trass_spec, 
                          congestion_function=func,
@@ -321,40 +318,47 @@ def trass_run (emme_modeller, scen_id, demand_mat_id, result_mat_id):
     noboa_id = "mf" + result_mat_id + "6"
     invlen_id = "mf" + result_mat_id + "7"
     create_matrix = emme_modeller.tool(
-        "inro.emme.data.matrix.create_matrix"
-    )
-    # create_matrix(matrix_id=tottim_id,
-                  # matrix_name="tottim",
-                  # matrix_description="total time s="+str(scen_id),
-                  # default_value=0)
-    # create_matrix(matrix_id=inveht_id,
-                  # matrix_name="inveht",
-                  # matrix_description="in veh time s="+str(scen_id),
-                  # default_value=0)
-    # create_matrix(matrix_id=auxtim_id,
-                  # matrix_name="auxtim",
-                  # matrix_description="aux time s="+str(scen_id),
-                  # default_value=0)
-    # create_matrix(matrix_id=twtime_id,
-                  # matrix_name="twtime",
-                  # matrix_description="tot wait time s="+str(scen_id),
-                  # default_value=0)
-    # create_matrix(matrix_id=fwtime_id,
-                  # matrix_name="fwtime",
-                  # matrix_description="first wait time s="+str(scen_id),
-                  # default_value=0)
-    # create_matrix(matrix_id=boatim_id,
-                  # matrix_name="boatim",
-                  # matrix_description="board time s="+str(scen_id),
-                  # default_value=0)
-    # create_matrix(matrix_id=noboa_id,
-                  # matrix_name="noboa",
-                  # matrix_description="no of board s="+str(scen_id),
-                  # default_value=0)
-    # create_matrix(matrix_id=invlen_id,
-                  # matrix_name="invlen",
-                  # matrix_description="in veh lenght s="+str(scen_id),
-                  # default_value=0)
+        "inro.emme.data.matrix.create_matrix")
+    create_matrix(matrix_id=tottim_id,
+                  matrix_name="tottim",
+                  matrix_description="total time s="+str(scen_id),
+                  default_value=0,
+                  overwrite=True)
+    create_matrix(matrix_id=inveht_id,
+                  matrix_name="inveht",
+                  matrix_description="in veh time s="+str(scen_id),
+                  default_value=0,
+                  overwrite=True)
+    create_matrix(matrix_id=auxtim_id,
+                  matrix_name="auxtim",
+                  matrix_description="aux time s="+str(scen_id),
+                  default_value=0,
+                  overwrite=True)
+    create_matrix(matrix_id=twtime_id,
+                  matrix_name="twtime",
+                  matrix_description="tot wait time s="+str(scen_id),
+                  default_value=0,
+                  overwrite=True)
+    create_matrix(matrix_id=fwtime_id,
+                  matrix_name="fwtime",
+                  matrix_description="first wait time s="+str(scen_id),
+                  default_value=0,
+                  overwrite=True)
+    create_matrix(matrix_id=boatim_id,
+                  matrix_name="boatim",
+                  matrix_description="board time s="+str(scen_id),
+                  default_value=0,
+                  overwrite=True)
+    create_matrix(matrix_id=noboa_id,
+                  matrix_name="noboa",
+                  matrix_description="no of board s="+str(scen_id),
+                  default_value=0,
+                  overwrite=True)
+    create_matrix(matrix_id=invlen_id,
+                  matrix_name="invlen",
+                  matrix_description="in veh lenght s="+str(scen_id),
+                  default_value=0,
+                  overwrite=True)
     result_spec = {
         "type": "EXTENDED_TRANSIT_MATRIX_RESULTS",
         "total_impedance": tottim_id,
@@ -370,7 +374,6 @@ def trass_run (emme_modeller, scen_id, demand_mat_id, result_mat_id):
         },
     }
     matrix_results = emme_modeller.tool(
-        "inro.emme.transit_assignment.extended.matrix_results"
-    )
+        "inro.emme.transit_assignment.extended.matrix_results")
     matrix_results(result_spec, scenario)
     print "Transit assignment performed for scenario " + str(scen_id)

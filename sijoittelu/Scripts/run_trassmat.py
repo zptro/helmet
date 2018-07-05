@@ -9,6 +9,6 @@ emme_desktop = _app.start_dedicated(
 )
 emme_modeller = _m.Modeller(emme_desktop)
 
-trassmat.trass_run(emme_modeller, 21, "mf4", "2")
-trassmat.trass_run(emme_modeller, 22, "mf6", "3")
-trassmat.trass_run(emme_modeller, 23, "mf5", "4")
+trassmat.transit_ass(emme_modeller, 21, "mf4", "2")
+trassmat.transit_ass(emme_modeller, 22, "mf6", "3")
+trassmat.transit_ass(emme_modeller, 23, "mf5", "4")

@@ -1,0 +1,116 @@
+~# ***********************************************************************
+~# ***                          HELMET 2.1                             ***
+~# ***                       hassmat_HM21.mac                          ***
+~# ***                      (oli: hassmat3.mac)                        *** 
+~# ***              Strafica Oy, ARa 2014-03-14                        ***
+~# ***                      WSP, ARA 2014-04-15 (stilisointeja)        ***
+~# ***   HSL, TE 2015-06-02 (yhdistetty path-maarittely foldereihin)   ***
+~# ***********************************************************************
+~#
+~# parametreina annetaan 
+~#    p1 autoliikenteen (ha+pa+ka) kysyntamatriisi
+~#    p2 aikavastusmatriisi  (tulos)
+~#    p3 etaisyysmatriisi    (tulos)
+~#    p4 ruuhkamaksumatriisi (tulos)
+~#    p5 aikajakson tunnus
+~#    p6 painokerroin (etaisyys ajaksi)
+~#
+~# ha-sijoittelumakro, joka huomioi myos ruuhkamaksun seka matkan pituuden
+~# sijoittelussa. Ruuhmaksu-attribuutin arvon ollessa kaikilla linkeilla 0,
+~# toimii kuten aiempi ha-sijoittelumakro (hassmat2.mac). Matka-ajat ja 
+~# matkan pituudet otetaan talteen, kuten ennenkin. Sijoittelutuloksissa
+~# tulee pienia eroja aiempaan nahden, koska sijoittelutulokset muuttuvat
+~# aina, kun mukaan otetaan matka-ajan lisaksi muita reitinvalintaan
+~# vaikuttavia tekijoita (vaikka lisatekijan painokerroin olisi 0!).
+~# 
+~# Muutokset aiempaan versioon (HELMET 2.0, 28.12.2013):
+~# 14.3.2014 (ARa/Strafica Oy)
+~#    - @rumpi-attribuutti muutettu @rumsi-attribuutiksi, koska HELMET 2.1:ssa
+~#      matkan pituus vaikuttaa reitinvalintaan
+~#    - @rumsi-attribuutin painokerroin makron kutsun yhteydessa annettavaksi.
+~# 14.7.2014 (TE/HSL)
+~#    - Lisatty kommentteja ja alkuun parametriluettelo
+~# 15.1.2015 (TE/HSL)
+~#    - muutettu ECHO-tekstin ohjaukseen sama parametri kuin bat-ajovirrassa
+~#
+~# autosijoittelu, etaisyysmatriisi talteen
+5.11
+1
+~?q=2
+2
+2
+c
+@rumsi
+%6%
+5
+mf%1%
+ 
+ 
+ 
+4
++
+ 
+mf%3%
+ y
+ halen
+ ha-pituusmatr %s% %5%
+~?q=1
+ y
+ 
+2
+260
+.01
+.005
+~#
+5.22
+1
+2
+~# linkin matka-aika talteen
+2.41
+1
+y
+@timau
+n
+timau
+ 
+*
+2
+1
+ 
+q
+~# autosijoittelu, matka-aikamatriisi talteen
+5.11
+1
+~?q=2
+2
+2
+c
+@rumsi
+%6%
+5
+mf%1%
+ 
+ 
+ 
+6
+@timau
++
+ 
+mf%2%
+ y
+ hatim
+ ha-aikamatr %s% %5%
+~?q=1
+ y
+ 
+2
+260
+.01
+.005
+~#
+5.22
+1
+2
+~! ECHO Ajettu autosijoittelu s=%s% %5%, mukana etaisyys ja ruuhkamaksu >> %ENNUSTEFOLDER%\database\bat_loki_ka.txt
+~#
+~/ Makro hassmat_HM21.mac %1% %2% %3% %4% %5% %6% ajettu loppuun
