@@ -3,6 +3,11 @@
 ~# tehdaan joukkoliikennesijoittelut (kulkutavat M2016)
 ~# muutettu bussivastusmatriisien numerot mf10-mf15 --> mf54-mf59
 ~# 
+~# Nimikirjaimet
+HSL
+~#
+~o=37 / Turhat tauot ja tulostus pois
+~#
 s=21
 ~<trassmat_M2016.mac 4 2 tayd,ah
 ~<trassmatosa_M2016.mac 4 2 tayd,ah

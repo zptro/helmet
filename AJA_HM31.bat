@@ -143,7 +143,9 @@ Emme -ng -m matin.mac  d311_del_ajoneuvokysyntaW.in
 Emme -ng -m import.mac %ENNUSTEFOLDER% mf01 mf03
 @REM
 @rem Kaynnistetaan Emme sijoittelupankissa suoraan makroon, joka tekee kaiken tarvittavan
-Emme -ng -m cmd-makro_sij_sij16.mac %%X  EI  %2
+Emme -ng -m aja_sisajo.mac %%X  EI  %2
+"%EMMEPATH%\Python27\python.exe" run_assignment.py %SIJOITTELUFOLDER%\sijoittelu.emp
+Emme -ng -m AJA_PERUS_LOPUT_M2016.MAC EI
 Emme -ng -m valivastus2_sij16.mac  %%X
 @rem
 @rem Siirretaan talteen "*.txt"tiedostot, eli vastukset eri muodossa
@@ -204,7 +206,7 @@ Emme -ng -m import.mac %ENNUSTEFOLDER% mf01 mf06
 @REM
 @rem Kaynnistetaan Emme sijoittelupankissa suoraan makroon, joka tekee kaiken tarvittavan
 Emme -ng -m aja_sisajo_loppu.mac  EI  %2
-Emme -ng -m ajatrass_loppu_M2016.mac
+"%EMMEPATH%\Python27\python.exe" run_end_assignment.py %SIJOITTELUFOLDER%\sijoittelu.emp
 Emme -ng -m AJA_LOPUT_M2016.MAC  EI
 "%EMMEPATH%\Python27\python.exe" hankearvdata.py %SIJOITTELUFOLDER%\Database
 @rem 
@@ -223,5 +225,3 @@ GOTO LOPPU
 ECHO Anna parametrina kierrosten maara (vahintaan 2)
 @rem
 :LOPPU
-PAUSE
-

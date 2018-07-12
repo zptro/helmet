@@ -92,6 +92,9 @@ ennuste/database/punvekt_TE_kaikki.mac
 ennuste/database/savu_MR1.mac
 ennuste/database/savu_MR3-MR6.mac
 ennuste/database/savu_print.mac
+ennuste/database/savu_auto_print_old.mac
+ennuste/database/savu_kest_print_old.mac
+ennuste/database/savu_print_old.mac
 ennuste/database/sisaanajo_alkukysynta.mac
 ennuste/database/sisaanajo_alkukysynta_HM30.mac
 ennuste/database/sisaanajo_nykykysynta_ymparys.mac
@@ -228,6 +231,16 @@ sijoittelu/database/vastusmathake_HM30.mac
 sijoittelu/database/vekt_jako.mac
 sijoittelu/database/vuorovalit_kopioi.mac
 sijoittelu/database/vuorovalit_lue.mac
+sijoittelu/database/AJA_LOPUT_M2016.MAC
+sijoittelu/database/AJA_PERUS_LOPUT_M2016.MAC
+sijoittelu/database/aja_sisajo.mac
+sijoittelu/database/aja_sisajo_loppu.mac
+sijoittelu/database/ajatrass_loppu_M2016.mac
+sijoittelu/database/hassmat.py
+sijoittelu/database/parameters.py
+sijoittelu/database/run_assignment.py
+sijoittelu/database/run_end_assignment.py
+sijoittelu/database/trassmat.py
 ennuste/database/emmebank
 ennuste/database/reports
 ennuste/database/usemacro_7112

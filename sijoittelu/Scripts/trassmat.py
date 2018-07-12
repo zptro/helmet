@@ -280,13 +280,13 @@ def transit_ass (emme_modeller, scen_id, demand_mat_id, result_mat_id):
         "weight": 0.53,
         "exponent": 2,
         "assignment_period": 1,
-        "orig_func": True,
+        "orig_func": False,
         "congestion_attribute": "us3",
     }
     # func = {
         # "type": "CUSTOM",
         # "assignment_period": 1,
-        # "orig_func": True,
+        # "orig_func": False,
         # "congestion_attribute": "us3",
         # "python_function": """def calc_segment_cost(transit_volume, capacity, segment):
                                 # return 0.53 * ((transit_volume / capacity) ** 2)"""
@@ -306,8 +306,7 @@ def transit_ass (emme_modeller, scen_id, demand_mat_id, result_mat_id):
                          congestion_function=func,
                          stopping_criteria=stop, 
                          log_worksheets=False, 
-                         scenario=scenario,
-    )
+                         scenario=scenario)
     
     tottim_id = "mf" + result_mat_id + "0"
     inveht_id = "mf" + result_mat_id + "1"

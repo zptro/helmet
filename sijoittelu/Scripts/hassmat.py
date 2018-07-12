@@ -1,6 +1,6 @@
-length_weight = 0.2
+import parameters
 
-def traffic_ass (emme_modeller, scen_id, demand_mat_id, 
+def traffic_ass (emme_modeller, scen_id, stopping_criteria, demand_mat_id, 
               time_mat_id, length_mat_id, cost_mat_id):
     """Perform car traffic assignment for one scenario."""
     emmebank = emme_modeller.emmebank
@@ -22,6 +22,7 @@ def traffic_ass (emme_modeller, scen_id, demand_mat_id,
                   matrix_description="ruuhkamaksumatr s="+str(scen_id),
                   default_value=0,
                   overwrite=True)
+    print "Matrices created."
     spec = {
         "type": "SOLA_TRAFFIC_ASSIGNMENT",
         "classes": [
@@ -30,7 +31,7 @@ def traffic_ass (emme_modeller, scen_id, demand_mat_id,
                 "demand": demand_mat_id,
                 "generalized_cost": {
                     "link_costs": "@rumsi",
-                    "perception_factor": length_weight
+                    "perception_factor": parameters.length_weight,
                 },
                 "results": {
                     "link_volumes": None,
@@ -91,12 +92,7 @@ def traffic_ass (emme_modeller, scen_id, demand_mat_id,
             "number_of_processors": "max"
         },
         "background_traffic": None,
-        "stopping_criteria": {
-            "max_iterations": 100,
-            "relative_gap": 0.0001,
-            "best_relative_gap": 0.01,
-            "normalized_gap": 0.005,
-        }
+        "stopping_criteria": stopping_criteria,
     }
     print "Traffic assignment started..."
     car_assignment = emme_modeller.tool(
@@ -104,12 +100,12 @@ def traffic_ass (emme_modeller, scen_id, demand_mat_id,
     car_assignment(spec, scenario)
     print "Traffic assignment performed for scenario " + str(scen_id)
 	
-	# Traffic assignment produces a generalize cost matrix.
-	# To get travel time, monetary cost is removed from general cost.
+	# Traffic assignment produces a generalized cost matrix.
+	# To get travel time, monetary cost is removed from generalized cost.
     matrix_spec = {
         "type": "MATRIX_CALCULATION",
         "expression": time_mat_id
-                      +"-"+str(length_weight)+"*"+length_mat_id
+                      +"-"+str(parameters.length_weight)+"*"+length_mat_id
                       +"-"+"6"+"*"+cost_mat_id,
         "result": time_mat_id,
         "constraint": {
@@ -124,4 +120,4 @@ def traffic_ass (emme_modeller, scen_id, demand_mat_id,
     matcalc = emme_modeller.tool(
         "inro.emme.matrix_calculation.matrix_calculator")
     matcalc(matrix_spec, scenario)
-    print "Generalized cost transformed to time"
+    print "Time matrix extracted from generalized cost"

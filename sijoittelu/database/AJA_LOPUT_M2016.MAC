@@ -18,6 +18,11 @@
 ~#
 ~# muista tuhota ensin jakoluvut.%1%max ja vastusmatriisit.%1%sum!!
 ~#
+~# Nimikirjaimet
+HSL
+~#
+~o=37 / Turhat tauot ja tulostus pois
+~#
 ~t1=%1%
 ~?t1=
 ~$VIRHE

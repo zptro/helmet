@@ -1,11 +1,13 @@
+import sys
 import inro.emme.desktop.app as _app
 import inro.modeller as _m
 import hassmat
 import parameters
 
+filepath = sys.argv[1]
 print "Starting Emme..."
 emme_desktop = _app.start_dedicated(
-    project="C:\Helmet\HELMET_KEHI_31\sijoittelu\sijoittelu.emp", 
+    project=filepath, 
     visible=False, 
     user_initials="HSL"
 )
