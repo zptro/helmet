@@ -31,7 +31,7 @@ def traffic_ass (emme_modeller, scen_id, stopping_criteria, demand_mat_id,
                 "demand": demand_mat_id,
                 "generalized_cost": {
                     "link_costs": "@rumsi",
-                    "perception_factor": parameters.length_weight,
+                    "perception_factor": parameters.vot_inv,
                 },
                 "results": {
                     "link_volumes": None,
@@ -105,8 +105,8 @@ def traffic_ass (emme_modeller, scen_id, stopping_criteria, demand_mat_id,
     matrix_spec = {
         "type": "MATRIX_CALCULATION",
         "expression": time_mat_id
-                      +"-"+str(parameters.length_weight)+"*"+length_mat_id
-                      +"-"+"6"+"*"+cost_mat_id,
+                      +"-"+str(parameters.vot_inv)+"*("+cost_mat_id
+                      +"+"+str(parameters.dist_cost)+"*"+length_mat_id+")",
         "result": time_mat_id,
         "constraint": {
             "by_value": None,

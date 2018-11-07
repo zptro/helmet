@@ -277,8 +277,8 @@ def transit_ass (emme_modeller, scen_id, demand_mat_id, result_mat_id):
     }
     func = {
         "type": "BPR",
-        "weight": 0.53,
-        "exponent": 2,
+        "weight": 1.06,
+        "exponent": 3,
         "assignment_period": 1,
         "orig_func": False,
         "congestion_attribute": "us3",
