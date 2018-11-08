@@ -3,7 +3,7 @@
 def bike_ass (emme_modeller, scen_id, demand_mat_id, result_mat_id):
     """Perform bike traffic assignment for one scenario."""
     emmebank = emme_modeller.emmebank
-    scenario = emmebank.scenario(scen_id)
+    scen = emmebank.scenario(scen_id)
     create_matrix = emme_modeller.tool(
         "inro.emme.data.matrix.create_matrix")
     create_matrix(matrix_id=result_mat_id,
@@ -51,5 +51,5 @@ def bike_ass (emme_modeller, scen_id, demand_mat_id, result_mat_id):
     bike_assignment(traffic_assignment_spec=spec, 
 	                dist_par=dist, 
 					replications=10, 
-					scenario=scenario)
+					scenario=scen)
     print "Bike assignment performed for scenario " + str(scen_id)
