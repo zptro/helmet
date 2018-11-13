@@ -88,10 +88,14 @@ def traffic_ass (emme_modeller, scen_id, stopping_criteria, demand_mat_id,
                 ]
             }
         ],
+        "background_traffic": {
+            "link_component": "@taust",
+		    "turn_component": None,
+            "add_transit_vehicles": False,
+        },
         "performance_settings": {
             "number_of_processors": "max"
         },
-        "background_traffic": None,
         "stopping_criteria": stopping_criteria,
     }
     print "Traffic assignment started..."

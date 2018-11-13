@@ -32,4 +32,4 @@ trassmat.transit_ass(emme_modeller, 21, "mf4", "2")
 trassmat.transit_ass(emme_modeller, 22, "mf6", "3")
 trassmat.transit_ass(emme_modeller, 23, "mf5", "4")
 
-kevass.bike_ass(emme_modeller, 19, "ms1", "mf386")
+kevass.bike_ass(emme_modeller, 19, "ms1", "mf386", "@fvol_pt")
