@@ -14,6 +14,10 @@ emme_desktop = _app.start_dedicated(
 emme_modeller = _m.Modeller(emme_desktop)
 print "Emme started."
 
+ruma.calc_road_cost(emme_modeller, 21)
+ruma.calc_road_cost(emme_modeller, 22)
+ruma.calc_road_cost(emme_modeller, 23)
+
 hassmat.traffic_ass(emme_modeller, 21, parameters.stopping_criteria_coarse,
                     "mf1", "mf380", "mf381", "mf370")
 hassmat.traffic_ass(emme_modeller, 22, parameters.stopping_criteria_coarse,

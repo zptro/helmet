@@ -77,7 +77,15 @@ def transit_ass (emme_modeller, scen_id, demand_mat_id, result_mat_id):
                 )
             # The estimated waiting time deviation caused by travel time
             # segment.data3 = 0.044 * cumulative_time
-            segment["@wait_time_dev"] = 0.044 * cumulative_time
+            if (segment.line.mode == 'b' or segment.line.mode == 'd'):
+                segment["@wait_time_dev"] = (((2.34+0.049*cumulative_time)**2)
+                                            / (2*segment.line.headway))
+            if (segment.line.mode == 'g' or segment.line.mode == 'p'):
+                segment["@wait_time_dev"] = (((0.78+0.049*cumulative_time)**2)
+                                            / (2*segment.line.headway))
+            if (segment.line.mode == 't'):
+                segment["@wait_time_dev"] = (((1.12+0.058*cumulative_time)**2)
+                                            / (2*segment.line.headway))
     scenario.publish_network(network)
     # values = network.get_attribute_values("TRANSIT_SEGMENT", "data3")
     # scenario.set_attribute_values("TRANSIT_SEGMENT", "data3", values)
@@ -90,7 +98,7 @@ def transit_ass (emme_modeller, scen_id, demand_mat_id, result_mat_id):
         "selections": {
             "transit_line": "mode=b",
         },
-        "expression": "8",
+        "expression": "6",
         "result": "ut3",
         "aggregation": None,
     })
@@ -110,7 +118,7 @@ def transit_ass (emme_modeller, scen_id, demand_mat_id, result_mat_id):
         "selections": {
             "transit_line": "mode=de",
         },
-        "expression": "10",
+        "expression": "8",
         "result": "ut3",
         "aggregation": None,
     })
@@ -277,7 +285,7 @@ def transit_ass (emme_modeller, scen_id, demand_mat_id, result_mat_id):
     }
     func = {
         "type": "BPR",
-        "weight": 1.06,
+        "weight": 1.23,
         "exponent": 3,
         "assignment_period": 1,
         "orig_func": False,

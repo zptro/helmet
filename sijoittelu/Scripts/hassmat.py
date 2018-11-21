@@ -88,11 +88,7 @@ def traffic_ass (emme_modeller, scen_id, stopping_criteria, demand_mat_id,
                 ]
             }
         ],
-        "background_traffic": {
-            "link_component": "@taust",
-		    "turn_component": None,
-            "add_transit_vehicles": False,
-        },
+        "background_traffic": None,
         "performance_settings": {
             "number_of_processors": "max"
         },
