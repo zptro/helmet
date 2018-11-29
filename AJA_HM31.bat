@@ -203,6 +203,7 @@ REM *** DEL ha*vastus.txt vastus*tayd*.txt
 @rem Poistetaan vanhat ha- ja jkl-matkamatriisit ja kopioidaan uudet ennustepankista
 Emme -ng -m matin.mac  d311_del_ha_ja_jl_kysyntaW.in
 Emme -ng -m import.mac %ENNUSTEFOLDER% mf01 mf06
+Emme -ng -m import.mac %ENNUSTEFOLDER% mf693 mf695 mf07
 @REM
 @rem Kaynnistetaan Emme sijoittelupankissa suoraan makroon, joka tekee kaiken tarvittavan
 Emme -ng -m sisaanajo_loppu_HM31.mac  %2

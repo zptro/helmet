@@ -42,4 +42,6 @@ trassmat.transit_ass(emme_modeller, 23, "mf5", "4")
 function_file = os.path.join(default_path,"d411_pituusriippuvaiset_pyora.in")
 process(function_file)
 
-kevass.bike_ass(emme_modeller, 19, "ms1", "mf386", "@fvol_pt")
+kevass.bike_ass(emme_modeller, 19, "mf07", "mf386", "@fvol_aht")
+kevass.bike_ass(emme_modeller, 19, "mf09", "mf386", "@fvol_pt")
+kevass.bike_ass(emme_modeller, 19, "mf08", "mf386", "@fvol_iht")
