@@ -38,7 +38,7 @@
 import numpy
 
 
-def calcFratar(ProdA, AttrA, Trips1, maxIter = 10):
+def calc_fratar(ProdA, AttrA, Trips1, maxIter = 10):
     '''Calculates fratar trip distribution
        ProdA = Production target as array
        AttrA = Attraction target as array
@@ -46,11 +46,10 @@ def calcFratar(ProdA, AttrA, Trips1, maxIter = 10):
        maxIter (optional) = maximum iterations, default is 10
        Returns fratared trip table
     '''
-    print 'Checking production, attraction balancing:'
     sumP = sum(ProdA)
     sumA = sum(AttrA)
     print 'Production: ', sumP
-    print 'Attraction: ', sumA
+    # print 'Attraction: ', sumA
     if sumP <> sumA:
         print 'Productions and attractions do not balance, attractions will be scaled to productions!'
         AttrA = AttrA*(sumP/sumA)

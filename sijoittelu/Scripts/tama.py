@@ -1,21 +1,23 @@
 import omx
 import numpy
-import CalcDistribution
+import distribution
+import inro.emme.database.emmebank as _eb
 
 population = numpy.loadtxt('C:\Helmet\HELMET_KEHI_31\sijoittelu\Data\\population.txt')
 workplaces = numpy.loadtxt('C:\Helmet\HELMET_KEHI_31\sijoittelu\Data\\workplaces.txt')
 logistics = numpy.loadtxt('C:\Helmet\HELMET_KEHI_31\sijoittelu\Data\\logistics.txt')
 shops = numpy.loadtxt('C:\Helmet\HELMET_KEHI_31\sijoittelu\Data\\shops.txt')
 external_growth = numpy.loadtxt('C:\Helmet\HELMET_KEHI_31\sijoittelu\Data\\external.txt')
+emmebank = _eb.Emmebank('C:\Helmet\HELMET_KEHI_31\sijoittelu\database\emmebank')
 
 trucks = ( 0.0044 * population 
          + 0.0222 * workplaces 
          + 0.1385 * logistics 
-         + 0.134 * shops
+         + 0.00134 * shops
          + 0.001)
 trailer_trucks = ( 0.0213 * workplaces
                  + 0.1944 * logistics
-                 + 0.095 * shops
+                 + 0.00095 * shops
                  + 0.001)
 vans = trucks
 garbage = 0.000125 * (population + 0.2 * workplaces)
@@ -34,6 +36,7 @@ for time_period in demand_share:
 base_demand_file = omx.openFile('C:\Helmet\HELMET_KEHI_31\sijoittelu\Data\\tama_pohjamatriisit.omx')
 garbage_destination = base_demand_file.mapping("zone_number")[2792]
 for id in base_demand_file.listMatrices():
+    print id
     demand_mtx = numpy.array(base_demand_file[id])
     demand_mtx.clip(0.000001, None) # Remove zero values
     row_sum = demand_mtx.sum(1)
@@ -42,13 +45,24 @@ for id in base_demand_file.listMatrices():
     external_demand = external_growth * external_base
     production = numpy.append(prod[id], external_demand)
     # Balance the demand matrix according to production vector
-    CalcDistribution.calcFratar(production, production, demand_mtx)
+    demand_mtx = distribution.calc_fratar(production, production, demand_mtx)
     if (id[:2] == "KA"):
         # Add garbage transports to/from zone 2792 
         demand_mtx[:-44,garbage_destination] += garb[id]
         demand_mtx[garbage_destination,:-44] += garb[id]
+    # emmebank.matrix(id).set_numpy_data(demand_mtx)
+    if (id[:3] == "YHD"):
+        id_nr = 71
+    if (id[:2] == "KA"):
+        id_nr = 72
+    if (id[:2] == "PA"):
+        id_nr = 73
+    if (id[-1:] == 'p'):
+        id_nr += 3
+    if (id[-1:] == 'i'):
+        id_nr += 6
+    emmebank.matrix("mf" + str(id_nr)).set_numpy_data(demand_mtx)
 base_demand_file.close()
-
 
 
 
