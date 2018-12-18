@@ -1,6 +1,7 @@
 import sys
 import inro.emme.desktop.app as _app
 import inro.modeller as _m
+import ruma
 import hassmat
 import parameters
 

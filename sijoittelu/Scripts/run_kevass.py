@@ -8,10 +8,9 @@ import trassmat
 import kevass
 import parameters
 
-filepath = sys.argv[1]
 print "Starting Emme..."
 emme_desktop = _app.start_dedicated(
-    project=filepath, 
+    project="C:\Helmet\HELMET_KEHI_31\sijoittelu\sijoittelu.emp", 
     visible=False, 
     user_initials="HSL"
 )
