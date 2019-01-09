@@ -77,13 +77,13 @@ def transit_ass (emme_modeller, scen_id, demand_mat_id, result_mat_id):
                 )
             # The estimated waiting time deviation caused by travel time
             # segment.data3 = 0.044 * cumulative_time
-            if (segment.line.mode == 'b' or segment.line.mode == 'd'):
+            if (segment.line.mode.id == 'b' or segment.line.mode.id == 'd'):
                 segment["@wait_time_dev"] = (((2.34+0.049*cumulative_time)**2)
                                             / (2*segment.line.headway))
-            if (segment.line.mode == 'g' or segment.line.mode == 'p'):
+            if (segment.line.mode.id == 'g' or segment.line.mode.id == 'p'):
                 segment["@wait_time_dev"] = (((0.78+0.049*cumulative_time)**2)
                                             / (2*segment.line.headway))
-            if (segment.line.mode == 't'):
+            if (segment.line.mode.id == 't'):
                 segment["@wait_time_dev"] = (((1.12+0.058*cumulative_time)**2)
                                             / (2*segment.line.headway))
     scenario.publish_network(network)

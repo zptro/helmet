@@ -2,25 +2,107 @@
 ~#
 ~# pyoraverkon viivytysfunktiot
 ~# TE 6.11.2018
+~# JW 17.12.2018
 ~#
  2.41
-~#* oletusarvo
+~#* baana
  1
  y
  vdf
  70
 
- mod=f
+ @pyoratieluokka=4
  
  4
-~#* pyoratieluokka maaritelty
+~#* erillinen pyoratie
  1
  y
  vdf
- @pyoratieluokka+70
+ 71
+
+ vdf=1
+ or vdf=6
+ or @pyoratieluokka=3
  
- mode=f
- and @pyoratieluokka=1,9
+ 4
+~#* pyoratie kadun varressa maantie
+ 1
+ y
+ vdf
+ 72
+
+ vdf=2
+ or vdf=7
+ and @pyoratieluokka=2
+ 
+ 4
+~#* pyoratie kadun varressa paakatu
+ 1
+ y
+ vdf
+ 73
+
+ vdf=3,4
+ or vdf=8,9
+ and @pyoratieluokka=2
+ 
+ 4
+~#* pyoratie kadun varressa pieni katu
+ 1
+ y
+ vdf
+ 74
+
+ vdf=0
+ or vdf=5
+ or vdf=10
+ and @pyoratieluokka=2
+ 
+ 4
+~#* pyorakaista
+ 1
+ y
+ vdf
+ 75
+
+ @pyoratieluokka=1
+ 
+ 4
+~#* sekaliikenne maantie
+ 1
+ y
+ vdf
+ 76
+
+ vdf=2
+ or vdf=7
+ and @pyoratieluokka=0
+ 
+ 4
+~#* sekaliikenne paakatu
+ 1
+ y
+ vdf
+ 77
+
+ vdf=3,4
+ or vdf=8,9
+ or type=138,140
+ or type=238,240
+ or type=338,340
+ and @pyoratieluokka=0
+ 
+ 4
+~#* sekaliikenne pieni katu
+ 1
+ y
+ vdf
+ 78
+ 
+ vdf=0
+ or vdf=5
+ or vdf=10
+ and @pyoratieluokka=0
 
  4
  q
