@@ -18,7 +18,7 @@ def bike_ass (emme_modeller, scen_id, demand_mat_id, time_mat_id, length_mat_id,
                   overwrite=True)
     netcalc = emme_modeller.tool(
         "inro.emme.network_calculation.network_calculator")
-	# Reset ul3 to zero
+    # Reset ul3 to zero
     netw_spec = {
         "type": "NETWORK_CALCULATION",
         "selections": {
@@ -30,7 +30,7 @@ def bike_ass (emme_modeller, scen_id, demand_mat_id, time_mat_id, length_mat_id,
     }
     netcalc(netw_spec, scen)
     # Define for which links to calculate length and save in ul3
-	netw_spec = {
+    netw_spec = {
         "type": "NETWORK_CALCULATION",
         "selections": {
             "link": length_for_links,

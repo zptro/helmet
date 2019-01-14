@@ -21,74 +21,71 @@ def transit_ass (emme_modeller, scen_id, demand_mat_id, result_mat_id):
     scenario = emmebank.scenario(scen_id)
     network = scenario.get_network()
     
-    # Calculation of cumulative line segment travel time
+    # Calculation of cumulative line segment travel time and speed
     for line in network.transit_lines():
-        # cumulative_length = 0
+        cumulative_length = 0
         cumulative_time = 0
+        cumulative_speed = 0
+        headway_sd = 0
         for segment in line.segments():
-            # cumulative_length += segment.link.length
+            cumulative_length += segment.link.length
             # Travel time for buses in mixed traffic
             if segment.transit_time_func == 1:
                 cumulative_time += ( segment.data2 * segment.link.length
                                    # + segment.link["@timau"]
                                    + segment.link.auto_time
-                                   + segment.dwell_time
-                )
+                                   + segment.dwell_time)
             # Travel time for buses on bus lanes
             if segment.transit_time_func == 2:
                 cumulative_time += ( segment.data2 * segment.link.length
-                                   + segment.dwell_time
-                )
+                                   + segment.dwell_time)
             # Travel time for trams AHT
             if segment.transit_time_func == 3:
                 speedstr = str(segment.link.data1)
-                if len(speedstr) < 8:
-                    speed = int(speedstr[0])
-                else:
-                    speed = int(speedstr[0:2])
-                cumulative_time += ( segment.link.length
-                                   / speed
-                                   * 60
-                                   + segment.dwell_time
-                )
+                # Digits 5-6 from end (1-2 from beg.) represent AHT speed.
+                # If AHT speed is less than 10, data1 will have only 5 digits.
+                speed = int(speedstr[:-4])
+                cumulative_time += ((segment.link.length / speed) * 60
+                                   + segment.dwell_time)
             # Travel time for trams PT
             if segment.transit_time_func == 4:
                 speedstr = str(segment.link.data1)
-                if len(speedstr) < 8:
-                    speed = int(speedstr[1:3])
-                else:
-                    speed = int(speedstr[2:4])
-                cumulative_time += ( segment.link.length
-                                   / speed
-                                   * 60
-                                   + segment.dwell_time
-                )
+                # Digits 3-4 from end represent PT speed.
+                speed = int(speedstr[-4:-2])
+                cumulative_time += ((segment.link.length / speed) * 60
+                                   + segment.dwell_time)
             # Travel time for trams IHT
             if segment.transit_time_func == 5:
                 speedstr = str(segment.link.data1)
-                if len(speedstr) < 8:
-                    speed = int(speedstr[3:5])
-                else:
-                    speed = int(speedstr[4:6])
-                cumulative_time += ( segment.link.length
-                                   / speed
-                                   * 60
-                                   + segment.dwell_time
-                )
-            # The estimated waiting time deviation caused by travel time
-            # segment.data3 = 0.044 * cumulative_time
-            if (segment.line.mode.id == 'b' or segment.line.mode.id == 'd'):
-                segment["@wait_time_dev"] = (((2.34+0.049*cumulative_time)**2)
-                                            / (2*segment.line.headway))
-            if (segment.line.mode.id == 'g' or segment.line.mode.id == 'p'):
-                segment["@wait_time_dev"] = (((0.78+0.049*cumulative_time)**2)
-                                            / (2*segment.line.headway))
-            if (segment.line.mode.id == 't'):
-                segment["@wait_time_dev"] = (((1.12+0.058*cumulative_time)**2)
-                                            / (2*segment.line.headway))
+                # Digits 1-2 from end represent IHT speed.
+                speed = int(speedstr[-2:])
+                cumulative_time += ((segment.link.length / speed) * 60
+                                   + segment.dwell_time)
+            if (cumulative_time > 0):
+                cumulative_speed = cumulative_length / cumulative_time * 60
+            # Headway standard deviation for buses
+            if (line.mode.id == 'b' or line.mode.id == 'd'):
+                headway_sd = ( 2.164 
+                             + 0.078 * cumulative_time 
+                             - 0.028 * cumulative_speed)
+            # Headway standard deviation for trunk buses
+            if (line.mode.id == 'g'):
+                headway_sd = ( 2.127 
+                             + 0.034 * cumulative_time 
+                             - 0.021 * cumulative_speed)
+            # Headway standard deviation for trams
+            if (line.mode.id == 't'):
+                headway_sd = ( 1.442 
+                             + 0.060 * cumulative_time 
+                             - 0.039 * cumulative_speed)
+            # Headway standard deviation for light rail
+            if (line.mode.id == 'p'):
+                headway_sd = ( 1.442 
+                             + 0.034 * cumulative_time 
+                             - 0.039 * cumulative_speed)
+            # Estimated waiting time addition caused by headway deviation
+            segment["@wait_time_dev"] = headway_sd**2 / (2*line.headway)
     scenario.publish_network(network)
-    # values = network.get_attribute_values("TRANSIT_SEGMENT", "data3")
-    # scenario.set_attribute_values("TRANSIT_SEGMENT", "data3", values)
     print "Cumulative travel times calculated for scenario "  + str(scen_id)
     # Definition of line specific boarding penalties
     netw_specs = []
