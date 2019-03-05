@@ -1,0 +1,25 @@
+~# ***********************************************************************
+~# ***                      HELMET-liikennemalli                       ***
+~# ***                sisaanajo_alkukysynta_HM31.mac                   ***
+~# ***                 WSP Finland, ARa 2010-03-17                     ***
+~# ***                        HSL TE 2019-02-12                        ***
+~# ***********************************************************************
+~#
+~# Lahtotietomatriisit
+~#  mf01  HAK-matkat (HS+ulk) alkukysynta AHT
+~#  mf02  HAK-matkat (HS+ulk) alkukysynta PT
+~#  mf03  HAK-matkat (HS+ulk) alkukysynta IHT
+~#  mf04  jkl-matkat alkukysynta AHT
+~#  mf05  jkl-matkat alkukysynta IHT
+~#  mf06  jkl-matkat alkukysynta PT
+~#
+~# *** ajetaan sisaan alkukysynnan matriisit ****************
+ 3.11
+~?e
+ d311_alkukysynta_sij19.in
+~?q=2
+ 2
+~#
+~# *** alkukysynta on jo sijoittelualueilla, jakoluvuilla kertomista ei enaa tarvita
+~#
+~/ Makro sisaanajo_alkukysynta_HM31.mac ajettu (kysynta sij19-jaolla)

@@ -1,5 +1,6 @@
 *.pyc
 *.doc
+*.docx
 *.xls
 *.xlsx
 *.txt

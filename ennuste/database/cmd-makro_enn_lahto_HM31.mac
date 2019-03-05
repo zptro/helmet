@@ -1,0 +1,91 @@
+~# ***********************************************************************
+~# ***                           HELMET 3.0                            *** 
+~# ***                      HELMET-liikennemalli                       ***
+~# ***                   cmd-makro_enn_lahto_HM31.mac                  ***
+~# ***               WSP Finland, ARa 2010-06-11                       ***
+~# ***                       WSP, ARA 2013-08-23 (HM20)                ***
+~# ***                        HSL, TE 2013-12-27                       ***
+~# ***                       WSP, ARA 2014-04-15 (HM21)                ***
+~# ***                       WSP, ARA 2014-05-06 (HM21 vaesto-osuudet) ***
+~# ***                        HSL, TE 2014-11-10 (reports)             ***
+~# ***                        HSL, TE 2017-07-20 (gr-aggregoinnit)     ***
+~# ***                       WSP, ARa 2017-11-01 (HM30)                ***
+~# ***                        HSL, TE 2019-02-12 (HM31)                ***
+~# ***********************************************************************
+~#
+~# Talla makrolla luetaan kaikki lahtotiedot ennustepankiin 
+~# ennen ensimmaista ajokierrosta. 
+~# Tata makroa kutsutaan komentoikkunasta samalla kun Emme kaynnistetaan.
+~#
+~# Makron ajaminen
+~# ~<cmd-makro_enn_lahto_HM31.mac
+~# 
+~# Nimikirjaimet
+HSL
+~#
+~o=37 / Turhat tauot ja tulostus pois
+~#
+~! del  reports_enn_old.txt
+~! copy reports_enn.txt  reports_enn_old.txt
+~! del  reports_enn.txt
+ reports=reports_enn.txt
+~#
+~# 
+~# ***************************************************************
+~/ *** Ajetaan sisaan lahtotiedot (vain talla 1. kierroksella)
+~# ***************************************************************
+~#
+~# jakolukuja tarvitaan vain ymparyskuntien ja ulkoisen liikenteen
+~# nykykysyntamatriisien, ei enaa alkukysynnan hajottamiseen
+3.11
+~?e
+d311_jakoluvut_enn13_sij16_2012.in
+~?q=2
+2
+~# *** 14 kuntaa:
+~<lahtotiedot_sisaan_14_kuntaa_HM30.mac
+~#
+~# lasketaan ikaryhmittaisista vaesto-osuuksista maarat:
+~<ikaryhmat.mac
+~#
+~# 
+~# *** Ymparyskunnat ja ulkoinen liikenne:
+~<lahtotiedot_sisaan_ymparys_ulkoiset_sij19.mac
+~<sisaanajo_nykykysynta_ymparys.mac
+~# 
+~# *** Autonomistusmallin valitulos- ja tulosmatriisien alustus
+~#
+3.11
+~?e
+d311_init_autonomistus_HM20.in
+~?q=2
+2
+~# *** Autonomistusmallin lahtotiedot
+3.11
+~?e
+d311_autonomistus_nyky_HM31.in
+~?q=2
+2
+~#
+3.11
+~?e
+d311_autonomistus_enn_HM30.in
+~?q=2
+2
+~#
+~# *** lasketaan asukastiheys: asukkaita / asuttujen ruutujen maapinta-ala
+~# autonomistusmallin ja jalankulkumallin lahtotiedoksi
+~# (lisatty versioon HELMET 3.0)
+~<asukastiheys.mac
+~#
+~# *** alkukysynta autonomistusmallin lahtotiedoksi
+~#     (sama tiedosto kuin sijoittelupankissakin, sijoittelualuejako M2019)
+~<sisaanajo_alkukysynta_HM31.mac
+~#
+~! ECHO Ajettu cmd-makro_enn_lahto_HM31.mac (ennustepankin lahtotietojen luku) >> bat_loki_ka.txt
+~#
+~/ *** Makro cmd-makro_enn_lahto_HM31.mac (lahtotietojen luku) ajettu loppuun.
+~/ *** Lopetetaan Emme ennustepankissa.
+~/
+q
+~# Makro paattyy tahan

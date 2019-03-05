@@ -1,7 +1,7 @@
-~# *** vdf_fillari.mac
+~# *** vdf_pyora.mac
 ~#
 ~# pyoraverkon viivytysfunktiot
-~# TE 6.11.2018
+~# TE 6.11.2018, 22.1.2019
 ~# JW 17.12.2018
 ~#
  2.41
@@ -22,7 +22,8 @@
 
  vdf=1
  or vdf=6
- or @pyoratieluokka=3
+ OR @pyoratieluokka=3
+ and mode=f
  
  4
 ~#* pyoratie kadun varressa maantie
@@ -56,6 +57,7 @@
  vdf=0
  or vdf=5
  or vdf=10
+ or vdf=99
  and @pyoratieluokka=2
  
  4
@@ -77,6 +79,7 @@
  vdf=2
  or vdf=7
  and @pyoratieluokka=0
+ and mode=f
  
  4
 ~#* sekaliikenne paakatu
@@ -90,7 +93,11 @@
  or type=138,140
  or type=238,240
  or type=338,340
+ or type=438,440
+ or type=538,540
+ or type=638,640
  and @pyoratieluokka=0
+ and mode=f
  
  4
 ~#* sekaliikenne pieni katu
@@ -102,8 +109,10 @@
  vdf=0
  or vdf=5
  or vdf=10
+ or vdf=99
  and @pyoratieluokka=0
+ and mode=f
 
  4
  q
-~/ *** vdf_fillari.mac ***
+~/ *** vdf_pyora.mac ***

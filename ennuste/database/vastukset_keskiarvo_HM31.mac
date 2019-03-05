@@ -1,8 +1,9 @@
 ~# ***********************************************************************
 ~# ***                      HELMET-liikennemalli                       ***
-~# ***                  vastukset_keskiarvo_2.mac                      ***
+~# ***                  vastukset_keskiarvo_HM31.mac                   ***
 ~# ***                 WSP Finland, ARa 2010-03-10                     ***
 ~# ***                 Strafica, ARa 2013-09-27 (liukuva ka)           ***
+~# ***                 HSL, JWest 2018-07-03 (uusi liukuva ka)         ***
 ~# ***********************************************************************
 ~#
 ~# Talla makrolla lasketaan vastuksiksi kaikkien edellisten kierrosten
@@ -21,8 +22,8 @@
 ~# 
 ~#
 ~# Makron ajaminen
-~# ~<vastukset_keskiarvo_2.mac
-~# 
+~# ~<vastukset_keskiarvo_HM31.mac  p1
+~# missa p1 on iteraatiokierroksen numero
 ~#
 ~# 
 ~# Lahtotietomatriisit	
@@ -754,5 +755,5 @@ n
 ~?b=1
 2
 q
-~/ Makro vastukset_keskiarvo_2.mac (keskiarvojen laskeminen) on ajettu
+~/ Makro vastukset_keskiarvo_HM31.mac (keskiarvojen laskeminen) on ajettu
 ~#

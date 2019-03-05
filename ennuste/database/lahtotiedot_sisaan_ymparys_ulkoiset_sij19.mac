@@ -1,0 +1,112 @@
+~# ***********************************************************************
+~# ***                          HELMET 2.1                             ***
+~# ***                      HELMET-liikennemalli                       ***
+~# ***         lahtotiedot_sisaan_ymparys_ulkoiset_sij19.mac           ***
+~# ***             Strafica Oy, JRP 2010-01-19                         ***
+~# ***                     HSL,  TE 2013-06-06                         ***
+~# ***                     WSP, ARa 2013-06-11                         ***
+~# ***                     WSP, ARa 2013-08-23                         ***
+~# ***                     WSP, ARa 2014-04-15                         ***
+~# ***                     HSL,  TE 2014-11-19                         ***
+~# ***                     HSL,  TE 2017-07-20                         ***
+~# ***********************************************************************
+~#
+~# Ajetaan sisaan ymparyskuntien makrojen ja ulkoisen liikenteen lahtotiedot
+~#
+~# HELMET 3.0 -paivitykset (TE 2017-07-20)
+~# - osa lahtotietomatriiseista ja -vektoreista hajotettu sij16-jakoon,
+~#   muut gr-aggregoituina
+~#
+~# HELMET 3.1 -paivitykset (TE 2019-02-12)
+~# - osa lahtotietovektoreista muutettu sij19-jakoon
+~#  
+~# Makron kutsuminen
+~# ~<lahtotiedot_sisaan_ymparys_ulkoiset_sij16.mac
+~# 
+~#
+3.11
+~?e
+d311_tuotosluvut_ymparyskunnat.in
+~?q=2
+2
+~#
+3.11
+~?e
+d311_vaesto_ymparyskunnat_sij19.in
+~?q=2
+2
+~#
+3.11
+~?e
+d311_nykyvaesto_ymparyskunnat_sij19.in
+~?q=2
+2
+~#
+3.11
+~?e
+d311_klosuus_ymparyskunnat_gr.in
+~?q=2
+2
+~#
+3.11
+~?e
+d311_jlkust_ymparyskunnat_gr.in
+~?q=2
+2
+~#
+3.11
+~?e
+d311_aprk_ymparyskunnat_sij19.in
+~?q=2
+2
+~#
+3.11
+~?e
+d311_ktapamalli_ymparyskunnat.in
+~?q=2
+2
+~#
+3.11
+~?e
+d311_hakeskikuorm_ymparyskunnat.in
+~?q=2
+2
+~#
+3.11
+~?e
+d311_nykyktavat_ymparyskunnat_gr.in
+~?q=2
+2
+~#
+~# *** makro sisaanajo_nykykysynta_ymparys.mac lukee nama tiedostot
+~#    seka kertoo matkamatriisit mf750 ja mf704-mf709 jakoluvuilla
+~#* 3.11
+~#* ~?e
+~#* d311_nykykysynta_ymparyskunnat_gr.in
+~#* ~?q=2
+~#* 2
+~#
+~#* 3.11
+~#* ~?e
+~#* d311_nykykysynta_ulkoinen_gr.in
+~#* ~?q=2
+~#* 2
+~#
+3.11
+~?e
+d311_nykytuotos_malli14_sij16.in
+~?q=2
+2
+~#
+3.11
+~?e
+d311_ympmatkoja14alueella.in
+~?q=2
+2
+3.11
+~?e
+d311_ulkoiset_kasvukerroin_gr.in
+~?q=2
+2
+~#
+~/ Makro lahtotiedot_sisaan_ymparys_ulkoiset_sij19.mac on ajettu.

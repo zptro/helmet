@@ -1,5 +1,5 @@
 ~# ***********************************************************************
-~# ***                          AJA_LOPUT_M2016.MAC                    ***
+~# ***                       AJA_TRASS_LOPUT_M2016.MAC                 ***
 ~# ***                    (ent. AJA_PERUS_M2016.mac)                   ***
 ~# ***                  Strafica Oy, ARa 2013-12-28                    ***
 ~# ***                          WSP, ARA 2014-04-15 (HM21)             ***
@@ -17,7 +17,7 @@
 ~# 11.1.2018 (HSL/TE)
 ~#    muutettu vastusmathake_HM21.mac versioksi vastusmathake_HM30.mac
 ~# 28.11.2018 (HSL/JW) 
-~#    poistettu sijoittelumakrojen kutsu
+~#    poistettu autosijoittelumakron kutsu
 ~#
 ~# muista tuhota ensin jakoluvut.%1%max ja vastusmatriisit.%1%sum!!
 ~#
@@ -30,18 +30,19 @@ HSL
 ~?t1=
 ~$VIRHE
 ~#
-~/ Makron AJA_LOPUT_M2016.MAC suoritus alkaa 
+~/ Makron AJA_TRASS_LOPUT_M2016.MAC suoritus alkaa 
 ~#
+~<ajatrass_perus_M2016.mac
 ~<ajatotaika_perus.mac
 ~<ajasissade_perus.mac
 ~<kopimat_perus.mac
 ~<ajavastus2_perus.mac
 ~<ajaoutin2_perus_jkl.mac   gr
 ~<ajatulvastus2_perus.mac   gr
+~<ajakev_M2016.mac
 ~<vastusmathake_HM30.mac    gr
 ~<ajaoutin2_perus_hake.mac  gr
-~<aja_suoritteet.mac
-~<hankearvdata.mac
+~<siirto_sij16.mac
 ~$LOPPU
 ~#
 ~:VIRHE
@@ -49,6 +50,6 @@ HSL
 ~t1=<nul>
 ~#
 ~:LOPPU
-~/ Makron AJA_LOPUT_M2016.MAC suoritus paattyy partitiolla %t1%
+~/ Makron AJA_TRASS_LOPUT_M2016.MAC suoritus paattyy partitiolla %t1%
 ~/
 q

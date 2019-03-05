@@ -1,7 +1,8 @@
 ~# ***********************************************************************
-~# ***                           HELMET 2.1                            ***
+~# ***                           HELMET 3.1                            ***
 ~# ***                      HELMET-liikennemalli                       ***
-~# ***                  cmd-makro_sij_loppu_sij16.mac                  ***
+~# ***                      aja_sisajo_loppu.mac                       ***
+~# ***               (ent. cmd-makro_sij_loppu_sij16.mac)              ***
 ~# ***              WSP Finland, ARa 2010-03-17                        ***
 ~# ***              WSP Finland, ARa 2010-04-15 (paivitys)             ***
 ~# ***                       HSL, TE 2014-03-01                        ***
@@ -13,19 +14,16 @@
 ~# ***   HSL,  TE 2015-06-02 (yhdistetty path-maarittely foldereihin)  ***
 ~# ***********************************************************************
 ~#
-~# Talla makrolla ajetaan loppusijoittelu, jossa kaytetaan 
-~# PITUUSRIIPPUVAISIA sijoittelufunktioita. 
-~# (funktioita voi tarvittaessa vaihtaa koodista, mutta silloin pit‰‰
-~#  huomioida tavaraliikenne, ks. huomautus funktiotiedostossa 
-~#  d411_pituusriippuvaiset_HM21.in)
+~# Talla makrolla lisataan ha-kysyntaan lentoaseman ja matkustajasatamien liikenne 
 ~#
+~# Muutoksia:
+~# - HSL, JW 2018-11-20 poistettu sijoittelumakron kutsu
+~# - HSL, TE 2019-02-18 poistettu tarpeettomaksi kaynyt aggregaatioparametri, muutettu kommentteja
 ~#
 ~# Makron ajaminen (summaustaso parametrina)
-~# ~<cmd-makro_sij_loppu_sij16.mac  p1  p2
+~# ~<aja_sisajo_loppu.mac  p1
 ~# parametrit
-~#    p1  ennustealuejakoa vastaava aggregaatiotaso (esim. gf)
-~#    p2  tulosmatriisien otsikkoon tuleva skenaarion tunnus
-~#        (esim. 2020TAV, oletus LOPPU)
+~#    p1  tulosmatriisien otsikkoon tuleva skenaarion tunnus (esim. 2020TAV, oletus LOPPU)
 ~# 
 ~# Nimikirjaimet
 HSL
@@ -34,38 +32,14 @@ HSL
 ~#
 ~t1=%1%
 ~?t1=
-~$VIRHE
+~t1=LOPPU
 ~#
-~t2=%2%
-~?t2=
-~t2=LOPPU
-~#
-~# *** PITUUSRIIPPUVAISET sijoittelufunktiot sisaan pankkiin
-~t4=d411_pituusriippuvaiset_HM40.in
-~# ~t4=d411_pituusriippuvaiset_HM21.in
-~# ~t4=d411_alkuperaiset.in
-~# ~t4=d411_konikaali_tarkennetut.in
-~# ~t4=d411_leikkuri_30pros.in
-4.11
-~?e
-%t4%
-~?q=2
-2
-~#
-~! ECHO Luettu %t4%  >> %ENNUSTEFOLDER%\database\bat_loki_ka.txt
+~# *** sijoittelufunktiot ajetaan sisaan pythonskriptissa
 ~# 
 ~# *** Ajetaan sisaan ja jaetaan sijoittelualueille ha- ja jkl-kysynta
-~<sisaanajo_loppu_sij16.mac  %t2%
+~<sisaanajo_loppu_sij16.mac  %t1%
 ~#
-~#
-~$LOPPU
-~#
-~:VIRHE
-~/ puuttuva summaustaso (esim. gf)
-~#
-~:LOPPU
-~/ *** Loppusijoittelun cmd-makro_sij_loppu_sij16.MAC ajettu loppuun parametreilla %t1% %t2%
-~/ *** Lopetetaan Emme sijoittelupankissa.
+~/ *** Makro aja_sisajo_loppu.mac ajettu loppuun parametreilla %t1%
 ~/
 q
 reports=

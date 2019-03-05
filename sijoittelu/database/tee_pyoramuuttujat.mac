@@ -1,6 +1,6 @@
 ~# *** tee_pyoramuuttujat.mac
 ~#
-~# Makro tekee pyoraliikennesijoittelun extra-attribuutteja (TE 2.11.2018)
+~# Makro tekee pyoraliikennesijoittelun extra-attribuutteja (TE 19.11.2018)
 ~# Muista ajaa skenaarioon 19
 ~# ~<tee_pyoramuuttujat.mac
 ~# 
@@ -45,6 +45,18 @@
  2 \linkkimuuttuja
  @ftim_pt
  pyorien matka-aika (min) PT
+ 0
+~#
+ 2
+ 2 \linkkimuuttuja
+ @volau
+ autoliikenteen liikennemaara (ajon/h)
+ 0
+~#
+ 2
+ 2 \linkkimuuttuja
+ @timau
+ autoliikenteen matka-aika (min)
  0
 ~#
  q

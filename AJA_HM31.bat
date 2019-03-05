@@ -1,4 +1,4 @@
-REM *** AJA_HM30.BAT  ***
+REM *** AJA_HM31.BAT  ***
 @rem 
 @rem ARa 17.6.2010, TE 6.6.2013, ARa 2.7.2013 (HM20)
 @rem ARA 30.7.2013 (Emme 4), TE 19.2.2014
@@ -11,6 +11,8 @@ REM *** AJA_HM30.BAT  ***
 @rem JWest 2.12.2017 (hankearvdata.py lisatty)
 @rem TE 10.1.2018 alkukysynta luetaan ennustepankkiin ja importataan sielta sijoittelupankkiin
 @rem TE 18.1.2018 vastusmatriisien deletoinnit ja kopioinnit kommenteiksi, tehdaan makroissa
+@rem JWest 9.1.2019 korvattu sijoittelumakrot Python-skripteilla
+@rem TE 20.2.2019 tehty kutsuihin HM31-muutoksia
 @rem
 @rem 
 @rem kutsuparametrit:
@@ -47,7 +49,7 @@ time /t >> bat_loki_ka.txt
 @rem
 @rem Kaynnistetaan Emme ennustepankissa suoraan makroon, joka tekee kaiken tarvittavan
 @rem  (sama kuin ei-keskiarvoistetuilla vastuksilla)
-Emme -ng -m cmd-makro_enn_lahto_HM30.mac
+Emme -ng -m cmd-makro_enn_lahto_HM31.mac
 @rem
 @rem ECHO lahtotiedot luettu ennustepankkiin >> bat_loki_ka.txt
 date /t >> bat_loki_ka.txt
@@ -65,7 +67,7 @@ Emme -ng -m import.mac %ENNUSTEFOLDER% mf01 mf06
 @rem
 @rem Kaynnistetaan Emme sijoittelupankissa suoraan makroon, joka tekee kaiken
 @rem  sijoittelun valmistelussa tarvittavan
-Emme -ng -m cmd-makro_sij_lahto_HM30.mac
+Emme -ng -m cmd-makro_sij_lahto_HM31.mac
 @rem
 date /t >> %ENNUSTEFOLDER%\database\bat_loki_ka.txt
 time /t >> %ENNUSTEFOLDER%\database\bat_loki_ka.txt
@@ -78,7 +80,8 @@ DEL jakoluvut.EImax vastusmatriisit.EIsum
 REM *** DEL ha*vastus.txt vastus*tayd*.txt
 @rem
 @rem Kaynnistetaan Emme sijoittelupankissa suoraan makroon, joka tekee kaiken tarvittavan
-Emme -ng -m cmd-makro_sij_sij16.mac  1  EI  %2
+"%EMMEPATH%\Python27\python.exe" run_assignment.py %SIJOITTELUFOLDER%\sijoittelu.emp
+Emme -ng -m AJA_TRASS_LOPUT_M2016.MAC EI
 Emme -ng -m valivastus2_sij16.mac   1
 @rem
 @rem Siirretaan talteen "*.txt"tiedostot, eli vastukset eri muodossa
@@ -143,9 +146,9 @@ Emme -ng -m matin.mac  d311_del_ajoneuvokysyntaW.in
 Emme -ng -m import.mac %ENNUSTEFOLDER% mf01 mf03
 @REM
 @rem Kaynnistetaan Emme sijoittelupankissa suoraan makroon, joka tekee kaiken tarvittavan
-Emme -ng -m aja_sisajo.mac %%X  EI  %2
+Emme -ng -m aja_sisajo.mac %%X  %2
 "%EMMEPATH%\Python27\python.exe" run_assignment.py %SIJOITTELUFOLDER%\sijoittelu.emp
-Emme -ng -m AJA_PERUS_LOPUT_M2016.MAC EI
+Emme -ng -m AJA_TRASS_LOPUT_M2016.MAC EI
 Emme -ng -m valivastus2_sij16.mac  %%X
 @rem
 @rem Siirretaan talteen "*.txt"tiedostot, eli vastukset eri muodossa
@@ -179,7 +182,7 @@ Emme -ng -m import.mac %SIJOITTELUFOLDER% mf51  mf53
 Emme -ng -m import.mac %SIJOITTELUFOLDER% mf398 mf400
 @REM
 @rem Kaynnistetaan Emme ennustepankissa suoraan makroon, joka tekee kaiken tarvittavan
-Emme -ng -m cmd-makro_enn_vika_HM30_ka.mac  %2
+Emme -ng -m cmd-makro_enn_vika_HM31_ka.mac  %1  %2
 @rem
 REM *** COPY mf01_06_mf693_695.txt  mf01_06_mf693_695.txt_99
 @rem
@@ -206,7 +209,7 @@ Emme -ng -m import.mac %ENNUSTEFOLDER% mf01 mf06
 Emme -ng -m import.mac %ENNUSTEFOLDER% mf693 mf695 mf07
 @REM
 @rem Kaynnistetaan Emme sijoittelupankissa suoraan makroon, joka tekee kaiken tarvittavan
-Emme -ng -m sisaanajo_loppu_HM31.mac  %2
+Emme -ng -m aja_sisajo_loppu.mac  %2
 "%EMMEPATH%\Python27\python.exe" run_end_assignment.py %SIJOITTELUFOLDER%\sijoittelu.emp
 Emme -ng -m AJA_LOPUT_M2016.MAC  EI
 "%EMMEPATH%\Python27\python.exe" hankearvdata.py %SIJOITTELUFOLDER%\Database

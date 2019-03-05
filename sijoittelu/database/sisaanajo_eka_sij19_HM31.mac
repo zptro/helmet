@@ -1,0 +1,163 @@
+~# ***********************************************************************
+~# ***                           HELMET 2.1                            ***     
+~# ***                      HELMET-liikennemalli                       ***
+~# ***                  sisaanajo_eka_sij19_HM31.mac                   ***
+~# ***                      WSP, ARa 2010-06-17                        ***
+~# ***                       HSL, TE 2013-06-06                        ***
+~# ***                 Strafica, ARa 2014-03-14                        ***
+~# ***                      WSP, ARa 2014-04-15 (HM21)                 ***
+~# ***********************************************************************
+~# Muutokset: 
+~# 14.03.2014 (ARa/Strafica Oy): Lentomatkustuksen ja matkustajasatamien
+~#            matriisit lisataan henkiloauto- ja joukkoliikenteen
+~#            kysyntamatriiseihin aiempien kuorma-autoliikenteen
+~#            matriisien sijaan.
+~# 27.12.2017 (TE/HSL) alkukysynta sij16-aluejaossa, joten niita ei tarvitse hajottaa
+~# 13.2.2019  (TE/HSL) muutettu makron nimi, mutta koska se ei lue alkukysyntaa, se
+~#            toimii aivan samalla tavalla kuin makro sisaanajo_eka_sij16_HM30.mac 
+~#
+~# ***********************************************************************
+~#
+~#
+~# Talla makrolla otetaan ennen ensimmaisen sijoittelun alkua sisaan 
+~# ha- ja jkl-kysynta lahtotietona olevasta tiedostosta.
+~# 
+~#
+~# Makron ajaminen
+~# ~<sisaanajo_eka_sij19_HM31.mac
+~# 
+~# Sisaan ajettavat matriisit
+~#  mf01 AHT ajoneuvot pks+ulk gs
+~#  mf02 paiva ajoneuvot pks+ulk gs
+~#  mf03 IHT ajoneuvot pks+ulk gs
+~#  mf04 AHT jkl pks gs
+~#  mf05 IHT jkl pks gs
+~#  mf06 paiva jkl pks gs
+~#
+~# Lentoaseman ja matkustajasatamien korjausmenettelyn tuloksena
+~#  mf131 lentomatkustuksen tuottama ha-liikenne ajoneuvoina AHT
+~#  mf132 lentomatkustuksen tuottama ha-liikenne ajoneuvoina IHT
+~#  mf133 lentomatkustuksen tuottama ha-liikenne ajoneuvoina PT
+~#  mf134 lentomatkustuksen tuottama joukkoliikennekysynta henkiloina AHT
+~#  mf135 lentomatkustuksen tuottama joukkoliikennekysynta henkiloina IHT
+~#  mf136 lentomatkustuksen tuottama joukkoliikennekysynta henkiloina PT
+~#  mf137 lentomatkustuksen tuottama taksiliikenne ajoneuvoina AHT
+~#  mf138 lentomatkustuksen tuottama taksiliikenne ajoneuvoina IHT
+~#  mf139 lentomatkustuksen tuottama taksiliikenne ajoneuvoina PT
+~#  mf141 matkustajasatamien tuottama ha-liikenne ajoneuvoina AHT
+~#  mf142 matkustajasatamien tuottama ha-liikenne ajoneuvoina IHT
+~#  mf143 matkustajasatamien tuottama ha-liikenne ajoneuvoina PT
+~#  mf144 matkustajasatamien tuottama joukkoliikennekysynta henkiloina AHT
+~#  mf145 matkustajasatamien tuottama joukkoliikennekysynta henkiloina IHT
+~#  mf146 matkustajasatamien tuottama joukkoliikennekysynta henkiloina PT
+~# 
+~# *** Poistetaan vanhat matriisit mf01-mf06 ja ajetaan sisaan alkukysynta ***************
+~#     Luetaan ennustepankkiin ja kopioidaan sielta, joten ei tarvitse lukea tassa.
+~# 3.11
+~# ~?e
+~# d311_alkukysynta_sij19.in
+~# ~?q=2
+~# 2
+~#
+~# *** Luaetaan sijoittelualuejaossa oleva kysynta ********
+~# *** ja lisataan ha-kysyntaan viela kuorma-automatkat. *****************
+~#
+~# *** HAK, AHT ***
+3.21
+1
+y
+mf01
+y
+AJNAHE
+ajon-matkat LAHTO (pks+ulk) AHT
+n
+mf01+(mf131+mf137+mf141)
+
+
+n
+~?b=1
+2
+q
+~# *** HAK, PAIVA ***
+3.21
+1
+y
+mf02
+y
+AJNPAE
+ajon-matkat LAHTO (pks+ulk) pai
+n
+mf02+(mf133+mf139+mf143)
+
+
+n
+~?b=1
+2
+q
+~# *** HAK, IHT ***
+3.21
+1
+y
+mf03
+y
+AJNAHE
+ajon-matkat LAHTO (pks+ulk) IHT
+n
+mf03+(mf132+mf138+mf142)
+
+
+n
+~?b=1
+2
+q
+~# 
+~# *** JKL, AHT ***
+3.21
+1
+y
+mf04
+y
+JKLAHT
+JKL LAHTO (pks+ulk) AHT 
+n
+mf04+(mf134+mf144)
+
+
+n
+~?b=1
+2
+q
+~# *** JKL, IHT ***
+3.21
+1
+y
+mf05
+y
+JKLIHT
+JKL LAHTO (pks+ulk) IHT 
+n
+mf05+(mf135+mf145)
+
+
+n
+~?b=1
+2
+q
+~# *** JKL, paiva ***
+3.21
+1
+y
+mf06
+y
+JKLPT
+JKL LAHTO (pks+ulk) pai 
+n
+mf06+(mf136+mf146)
+
+
+n
+~?b=1
+2
+q
+~# 
+~/ Makro sisaanajo_eka_sij19_HM31.mac ajettu

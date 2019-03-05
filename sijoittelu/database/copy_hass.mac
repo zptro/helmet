@@ -1,0 +1,88 @@
+~# *** copy_hass.mac
+~#
+~# kopioidaan autosijoittelun tuloksia pyoraverkolle
+~# TE 19.11.2018
+~# parametri p1 = autoskenaarion numero
+~#
+~t1=%1%
+~?t1=
+~$VIRHE
+~#
+~# ** testataan autosijoittelun tilanne
+ s=%t1%
+~z=0
+~?!f&1024
+~$EISIJO
+~# on sijoiteltu
+~z=10
+~$OHI1
+~:EISIJO
+~?!f&32
+~$OHI1
+~# on valmisteltu, mutta ei sijoiteltu
+~z=5
+~:OHI1
+~/ autosijoittelun tilanne %z% skenaariossa %t1%
+~/ (10 = tehty, 5 = valmisteltu, 0 = ei ole)
+~#
+~# ** talletetaan tilanne skalaariin ms10
+ 3.21
+ 1
+ y
+ ms10
+ y
+ hass
+ autosijoittelun tilanne
+~?q=1
+ y
+ 0
+ %z%
+
+ 
+~?q=2
+ 2
+ q
+~# ** onko autosijoittelu tehty?
+~?z=10
+~$JATKO
+~#
+~?!z=0
+~$OHI2
+~/ *** arvoja ei voi kopioida, koska skenaariossa %t1% ei ole tehty autosijoittelua
+~$LOPPU
+~:OHI2
+~?!z=5
+~$OHI3
+~/ *** arvoja ei voi kopioida, koska skenaarion %t1% autosijoittelu on valmisteltu, mutta ei viela tehty 
+~$LOPPU
+~:OHI3
+~/ *** testimuuttujalla on outo arvo z=%z%, pitaisi olla 0, 5 tai 10
+~$LOPPU
+~#
+~:JATKO
+~# ** siirrytaan pyoraskenaarioon ja kopioidaan tuloksia
+ s=19
+~#
+ 2.41
+~# kopioidaan autosijoittelun liikennemaara
+ 2
+ %t1%
+ volau
+ @volau
+ n
+ mod=c
+ 
+~# kopioidaan autosijoittelun matka-aika
+ 2
+ %t1%
+ timau
+ @timau
+ n
+ mod=c
+ 
+ q
+~$LOPPU
+~:VIRHE
+~/ *** Anna parametrina autoskenaarion numero
+~:LOPPU
+~#

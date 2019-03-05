@@ -1,0 +1,134 @@
+~# ***********************************************************************
+~# ***                          HELMET 2.1                             ***
+~# ***                      HELMET-liikennemalli                       ***
+~# ***                cmd-makro_sij_lahto_HM31.mac                    ***
+~# ***                     WSP, ARa 2010-06-17                         ***
+~# ***                     HSL,  TE 2013-06-06                         ***
+~# ***                     WSP, ARa 2013-07-02                         ***
+~# ***                     HSL,  TE 2014-03-06                         ***
+~# ***                Strafica, ARa 2014-03-14 (mm. tavaraliikenne)    ***
+~# ***                     WSP, ARa 2014-04-15 (HM21 nimeaminen)       ***
+~# ***                Strafica, ARa 2014-05-05 (mm. terminaalit)       ***
+~# ***                     HSL,  TE 2014-11-10 (reports)               ***
+~# ***                     HSL,  TE 2015-01-14 (ECHO tekstin ohjaus)   ***
+~# ***   HSL, TE 2015-06-02 (yhdistetty path-maarittely foldereihin)   ***
+~# ***   HSL, TE 2015-11-11 (lisatty d301-tiedoston luku)              ***
+~# ***   HSL, TE 2017-04-04 (kulkutavat ja sijoittelualueet M2016)     ***
+~# ***   HSL, TE 2017-12-22 (sij16-alkukysynta, md15=myymalakerros)    ***
+~# ***   HSL, TE 2018-01-08 (palautettu jakolukujen luku)              ***
+~# ***   HSL, TE 2019-02-13 (sij19-lahtotiedostot)                     ***
+~# ***********************************************************************
+~#
+~# Talla makrolla ajetaan kaikki tarvittava sijoittelupankissa.
+~# Tata makroa kutsutaan komentoikkunasta samalla kun Emme kaynnistetaan.
+~#
+~# Tama makro lukee sisaan pankkiin lahtotiedot eli jakoluvut ja 
+~# alkukysynnan (ha ja jkl), joita korjataan lentoaseman ja matkustaja-
+~# terminaalien osalta.
+~# Lisaksi tehdaan tavaraliikenteen sijoittelut.
+~#  
+~#
+~# Makron ajaminen
+~# ~<cmd-makro_sij_lahto_HM31.mac
+~# 
+~# Nimikirjaimet
+HSL
+~#
+~#
+~o=37 / Turhat tauot ja tulostus pois
+~#
+~! del  reports_sij_old.txt
+~! copy reports_sij.txt  reports_sij_old.txt
+~! del  reports_sij.txt
+ reports=reports_sij.txt
+~#
+~#
+~# *** Alkuvalmistelut (vain 1. kierroksella)
+~# poistetaan sken 20 ja kopioidaan sken 21 aht-verkko kavelyskenaarioksi 20
+ 1.22
+ 2
+ 20
+ y
+~#
+ 3
+ 21
+ 20
+ kävelyverkko, kopio sken 21
+ n
+ q
+~# 
+~# ** aluevastaavuudet sisaan pankkiin
+ 3.01
+ 1
+~?e
+d301_sijoittelupankki_M2016.in
+~?q=2
+ 2
+ q
+~#
+~# ** luetaan jakoluvut sisaan pankkiin, jotta niilla voidaan painottaa vastusmatriiseja 
+~#    yhteenvetoraportteja *vastus*.txt varten
+3.11
+~?e
+d311_jakoluvut_enn13_sij19.in
+~?q=2
+ 2
+~#
+~# ** Ykkosmatriisi sisaan pankkiin
+3.11
+~?e
+d311_ykkosmatriisi.in
+~?q=2
+2
+~# 
+~# ***************************************************************************
+~# *** Luetaan ennusteprosessissa kaytettavat sijoittelufunktiot 
+~#     (HELMET2.1:ssa pituusriippuvaiset)
+~t4=d411_pituusriippuvaiset_HM30.in
+~# ~t4=d411_pituusriippuvaiset_HM21.in
+~# ~t4=d411_alkuperaiset.in
+~# ~t4=d411_konikaali_tarkennetut.in
+~# ~t4=d411_leikkuri_30pros.in
+4.11
+~?e
+%t4%
+~?q=2
+2
+~! ECHO Luettu %t4% >> %ENNUSTEFOLDER%\database\bat_loki_ka.txt
+~# 
+~# ***************************************************************************
+~# *** Lentoaseman ja matkustajasatamien korjausmatriisit sisaan pankkiin ***
+3.11
+~?e
+d311_matktermkys_sij19.in
+~?q=2
+2
+~# ***************************************************************************
+~# *** Alkukysynnan lukeminen sisaan eri makrolla 
+~<sisaanajo_eka_sij16_HM30.mac
+~#
+~! ECHO Luettu lahtotiedot sijoittelupankkiin >> %ENNUSTEFOLDER%\database\bat_loki_ka.txt
+~#
+~# ************************************************************************
+~# *** Tavaraliikenteen malli *********************************************
+~<tama_HM31.mac
+~#
+~# Tehdaan tavaraliikenteen sijoittelut kaikille aikajaksoille ************
+~<aja_tavaraliikenteen_sijoittelut_M2016.mac 
+~# ************************************************************************
+~#
+~# matriisien tulostusformaatti
+~<314_modpar_73.mac
+~#
+~#
+~/ *** Sijoittelun cmd-makro_sij_lahto_HM31.mac ajettu.
+~/ *** - sijoittelun lahtotietojen luku
+~/ *** - funktioiden valinta iterointiin
+~/ *** - lentoaseman ja terminaalien malli
+~/ *** - tavaraliikenteen malli ja sijoittelut
+~/ *** Lopetetaan Emme sijoittelupankissa.
+~/
+q
+~/ *** cmd-makro_sij_lahto_HM31.mac ajettu
+~# Makro paattyy tahan
+

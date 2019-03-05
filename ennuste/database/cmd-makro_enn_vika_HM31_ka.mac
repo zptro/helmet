@@ -1,28 +1,24 @@
 ~# ***********************************************************************
 ~# ***                           HELMET 3.0                            ***
 ~# ***                      HELMET-liikennemalli                       ***
-~# ***                    cmd-makro_enn_HM31_ka.mac                    ***
-~# ***              WSP Finland, ARa 2010-03-11                        ***
+~# ***                 cmd-makro_enn_vika_HM31_ka.mac                  ***
+~# ***              WSP Finland, ARa 2010-03-15                        ***
 ~# ***                      WSP, ARa 2013-07-30 (HM20)                 ***
 ~# ***                       HSL, TE 2013-12-30                        ***
-~# ***                      WSP, ARa 2014-03-14 (liukuva ka)           *** 
+~# ***                      WSP, ARa 2014-03-14 (liukuva ka)           ***
 ~# ***                      WSP, ARa 2014-04-15 (HM21)                 ***
 ~# ***                       HSL, TE 2017-06-21 (sij16)                ***
-~# ***                      WSP, ARA 2017-10-31 (HM30)                 ***
+~# ***                      WSP, ARa 2017-10-31 (HM30)                 ***
 ~# ***                       HSL, TE 2018-01-26 (koko vrk kt-osuus)    ***
 ~# ***********************************************************************
 ~#
-~# Talla makrolla ajetaan kaikki tarvittava ennustepankissa.
+~# Talla makrolla ajetaan kaikki tarvittava ennustepankissa
+~# viimeisella ajokierroksella.
 ~# Tata makroa kutsutaan komentoikkunasta samalla kun Emme kaynnistetaan.
-~# Makroa kutsuttaessa kierroksen numero valitetaan parametrina
-~# 
-~# Tama *_ka -versio eroaa "tavallisesta" siina, etta vastuksista
-~# kaytetaan edellisten kierrosten liukuvaa keskiarvoa.
-~#
 ~#
 ~# Makron ajaminen
-~# ~<cmd-makro_enn_HM31_ka.mac  p1 p2
-~#    p1  kierroksen numero
+~# ~<cmd-makro_enn_vika_HM31_ka.mac  p1  p2
+~#    p1  kierrosten kokonaismaara
 ~#    p2  tulosmatriisien otsikkoon tuleva skenaarion tunnus
 ~#        (esim. 2020TAV, oletus ENNUSTE)
 ~# 
@@ -31,43 +27,25 @@ HSL
 ~#
 ~o=37 / Turhat tauot ja tulostus pois
 ~#
+~x=%1%
+~#
 ~t2=%2%
 ~?t2=
 ~t2=ENNUSTE
 ~#
 ~# *** vastukset on jo aiemmin tuotu sijoittelupankista,
 ~#     joten enaa ei ole tarpeen ajaa makroa vastukset_sisaan_HM21.mac *******
-~#
-~# DOS-skriptin luupissa muuttuja %%x saa arvot (2,1,viim), jotka valitetaan emmeen parametrina
-~x=%1%
-~?x>3
-~$KOLME
-~?x>2
-~$KAKSI
-~?x>1
-~$YKSI
-~$VIRHE
-~#
-~:YKSI
-~/ luuupin ensimmainen kierros (x=2), vastukset laskettu pohjakysynnalla, niille ei tehda muuta
-~$jatko
-~#
-~:KAKSI
-~# *** toinen kierros (x=3), kaytossa ensimmaiset vastukset ennustetulla kysynnalla
-~# *** Otetaan talteen vastukset, jotta seuraavalla kierroksella voidaan laskea keskiarvo
-~<vastukset_kop.mac
-~$jatko
-~#
-~:KOLME
-~# *** kierros vahintaan kolmas (x>3)
+~# 
 ~# *** Lasketaan juuri sisaan ajettujen ja edellisten kierrosten vastusten 
 ~# *** liukuva keskiarvo kaavalla (uusi+(x-3)*vanha)/(x-2)
 ~<vastukset_keskiarvo_HM31.mac  %x%
 ~#
-~:jatko
-~#
+~# 
 ~# *** Ajetaan 14 kunnan ennuste (sis. autonomistuksen) ******************
-~<PAAMAKRO_HM30.mac
+~# *** Se on viimeisella kierroksella erilainen, koska tehdaan
+~#     suuntautumiskorjaus (eli PAAMAKRO_vika_*.mac eika PAAMAKRO_*.mac
+~#     niin kuin muilla kierroksilla)
+~<PAAMAKRO_vika_HM30.mac
 ~#
 ~# 
 ~# *** Ajetaan ymparyskuntien ja ulkoisen liikenteen ennuste *************
@@ -77,23 +55,18 @@ HSL
 ~#
 ~# *** Yhdistetaan 14 kunnan ja ymparyskuntien ja ulkoisen liikenteen
 ~# *** tuntimatriisit ja otetaan ha-kysynta ulos sijoittelupankkia varten. 
-~<yhd_14_ja_muut_tuntimatriisit_sij16.mac  EI  %t2%
+~<yhd_14_ja_muut_tuntimatriisit_sij16.mac gr %t2%
 ~#
 ~# *** Lasketaan koko vuorokauden kulkutapaosuudet
 ~<kulkutapaosuudet_MRyht_HM30.mac ga
 ~#
-~! ECHO Ennustemakro CMD-MAKRO_enn_HM31_KA.MAC (keskiarvovastukset) ajettu parametreilla %x% %t2% >> bat_loki_ka.txt
+~! ECHO Ennustemakro CMD-MAKRO_ENN_VIKA_HM31_ka.MAC (keskiarvovastukset) ajettu parametreilla %x% %t2% >> bat_loki_ka.txt
 ~#
 ~# *** LISAA TULOSTUKSIA??
-~$LOPPU
-~#
-~:VIRHE
-~/ virheellinen kierrosparametri %1%
-~#
-~:LOPPU
-~/ *** Ennusteen CMD-MAKRO_enn_HM31_KA.MAC (keskiarvovastukset) ajettu loppuun parametreilla %x% %t2%.
-~/ *** Lopetetaan Emme ennustepankissa.
 ~/
+~/ *** Ennusteen CMD-MAKRO_ENN_VIKA_HM31_ka.MAC (keskiarvovastukset) ajettu loppuun parametreilla %x% %t2%.
+~/ *** Lopetetaan Emme ennustepankissa.
 q
+reports=
 
 ~# Makro paattyy tahan

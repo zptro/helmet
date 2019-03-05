@@ -1,0 +1,690 @@
+~# *** tama_HM31.mac
+~#
+~# Strafica 3.6.2014
+~#
+~# Muutokset:
+~# 14.7.2014 (TE/HSL)
+~#    - Muutettu luuppien lopetusehtoja varmemmiksi ja selkeammiksi 
+~#      (if x=N, goto loppu --> if x<N, goto alku). 
+~#    - Muutettu balansointi luupiksi 3 ja entinen luuppi 3 luupiksi 4. 
+~#    - Lisatty tilde-merkit kommenttien alkuun.
+~# 13.11.2014 (TE/HSL)
+~#    - Siirretty tavaraliikenteen tulosmatriisien alustus omaan tiedostoonsa
+~# 7.4.2017 (TE/HSL)
+~#    - sijoittelualuejako M2016, jossa ulkosyotot 31001-31036 ja satamasentroidit 31500-31502
+~# 19.12.2017 (TE/HSL)
+~#    - Myymalakerrosalat on siirretty vektoriin md15, koska ennustekansion vektoriin md16 on
+~#      talletettu kaupan tyopaikkamaara henkiloliikenteen Helmet 3.0 kysyntaennustetta varten.
+~#
+~# Tavaraliikenteen ennustemakro HELMET 2.5
+~# 
+~# Tuottaa kasvatetut tavaraliikenteen osamatriisit 
+~# sijoittelun ja vastusten laskennan pohjaksi
+~#
+~# Tulosmatriisit 
+~#
+~#   mf71: YHD aht ennuste
+~#   mf72: KA aht ennuste
+~#   mf73: PA aht ennuste
+~#   mf74: YHD pt ennuste
+~#   mf75: KA pt ennuste
+~#   mf76: PA pt ennuste
+~#   mf77: YHD iht ennuste
+~#   mf78: KA iht ennuste
+~#   mf79: PA iht ennuste
+~#
+~# Ennusteen lahtokohdat pankkiin
+batchin=d311_tama_pohjamatriisit_sij19.in
+3.11
+2 
+
+batchin=d311_tama_ennustevektorit_sij19.in
+3.11
+2 
+
+batchin=d311_tama_alustus.in
+3.11
+2
+
+batchin=
+~# Poistetaan pohjamatriiseista nolla-alkiot ja lasketaan summat
+~x=61
+~# Luuppi1 alkaa
+~:alku1
+3.21
+1
+y
+mf%x%
+n
+mf%x%.max.0.000001
+ 
+ 
+n
+1
+ 
+1
+y
+mo%x%
+n
+mf%x%
+ 
+ 
+n
+ 
+1
+ 
+1
+y
+md%x%
+n
+mf%x%
+ 
+ 
+n
+ 
+1
+ 
+1
+y
+ms%x%
+n
+mf%x%
+ 
+ 
+n
+ 
+ 
+1
+ 
+q
+~x+1
+~?x<70
+~$alku1
+~# Luuppi1 paattyy
+~#
+~# Tuotosten laskenta 
+3.21
+1             / AHT YHD 
+y
+md71
+n
+0.0659*((md11*0.0000)+(md17*0.0213)
++(md18*0.1944)+(md15*0.00095))+0.001
+ 
+ 
+n
+1
+ 
+1
+y
+md71
+n
+md61*md81
+ 
+ 
+y
+31001,31099   / ulkosyotot
+ 
+1
+ 
+1
+y
+md71
+n
+(0.2*md71)+(0.8*md61*md81)
+ 
+ 
+y
+31500,31509   / satamat
+ 
+1
+ 
+1           /AHT KA 
+y
+md72
+n
+0.0659*((md11*0.0044)+(md17*0.0222)
++(md18*0.1385)+(md15*0.00134))+0.001
+ 
+ 
+n
+1
+ 
+1
+y
+md72
+n
+md62*md81
+ 
+ 
+y
+31001,31099   / ulkosyotot
+ 
+1
+ 
+1
+y
+md72
+n
+(0.6*md72)+(0.4*md62*md81)
+ 
+ 
+y
+31500,31509   / satamat
+ 
+1
+ 
+1           /AHT PA
+y
+md73
+n
+0.1068*md72
+ 
+ 
+n
+1
+ 
+1           /Transpoosit
+y
+mo71
+n
+md71'
+ 
+ 
+n
+1
+ 
+1
+y
+mo72
+n
+md72'
+ 
+ 
+n
+1
+
+1
+y
+mo73
+n
+md73'
+ 
+ 
+n
+1
+
+1           /PT YHD 
+y
+md74
+n
+0.0702*((md11*0.0000)+(md17*0.0213)
++(md18*0.1944)+(md15*0.00095))+0.001
+ 
+ 
+n
+1
+ 
+1
+y
+md74
+n
+md64*md81
+ 
+ 
+y
+31001,31099   / ulkosyotot
+ 
+1
+ 
+1
+y
+md74
+n
+(0.2*md74)+(0.8*md64*md81)
+ 
+ 
+y
+31500,31509   / satamat
+ 
+1
+ 
+1           /PT KA             
+y
+md75
+n
+0.0702*((md11*0.0044)+(md17*0.0222)
++(md18*0.1385)+(md15*0.00134))+0.001
+ 
+ 
+n
+1
+ 
+1
+y
+md75
+n
+md65*md81
+ 
+ 
+y
+31001,31099   / ulkosyotot
+ 
+1
+ 
+1
+y
+md75
+n
+(0.6*md75)+(0.4*md65*md81)
+ 
+ 
+y
+31500,31509   / satamat
+ 
+1
+ 
+1           /PT PA
+y
+md76
+n
+0.1068*md75
+ 
+ 
+n
+1
+ 
+1           /Transpoosit
+y
+mo74
+n
+md74'
+ 
+ 
+n
+1
+ 
+1
+y
+mo75
+n
+md75'
+ 
+ 
+n
+1
+ 
+1
+y
+mo76
+n
+md76'
+ 
+ 
+n
+1
+ 
+1           /IHT YHD
+y
+md77
+n
+0.0662*((md11*0.0000)+(md17*0.0213)
++(md18*0.1944)+(md15*0.00095))+0.001
+ 
+ 
+n
+1
+ 
+1
+y
+md77
+n
+md67*md81
+ 
+ 
+y
+31001,31099   / ulkosyotot
+ 
+1
+ 
+1
+y
+md77
+n
+(0.2*md77)+(0.8*md67*md81)
+ 
+ 
+y
+31500,31509   / satamat
+ 
+1
+ 
+1           /IHT KA
+y
+md78
+n
+0.0662*((md11*0.0044)+(md17*0.0222)
++(md18*0.1385)+(md15*0.00134))+0.001
+ 
+ 
+n
+1
+ 
+1
+y
+md78
+n
+md68*md81
+ 
+ 
+y
+31001,31099   / ulkosyotot
+ 
+1
+ 
+1
+y
+md78
+n
+(0.6*md78)+(0.4*md68*md81)
+ 
+ 
+y
+31500,31509   / satamat
+ 
+1
+ 
+1           /IHT PA
+y
+md79
+n
+0.1068*md78
+ 
+ 
+n
+1
+ 
+1           /Transpoosit
+y
+mo77
+n
+md77'
+ 
+ 
+n
+1
+ 
+1
+y
+mo78
+n
+md78'
+ 
+ 
+n
+1
+ 
+1
+y
+mo79
+n
+md79'
+ 
+ 
+n
+1
+ 
+1            / Lasketaan diagonaalille 1
+y
+mf80
+n
+1*(p.eq.q)+0*(p.ne.q)
+ 
+ 
+n
+1
+ 
+q
+~# Kasvatetaan pohjamatriisit ja lisataan paljon muuttuvat alueet
+~y=1
+~# Luuppi2 alkaa
+~:alku2
+3.21
+1
+y
+md70
+y
+seul
+seula suunn tuotoksille
+y
+0
+((md7%y%/md6%y%).max.0.1).min.100
+ 
+ 
+y
+gr101,gr3701
+ 
+1
+ 
+1
+y
+md70
+n
+0
+ 
+md70
+0,5,include
+n
+1
+ 
+1
+y
+md70
+n
+1
+ 
+md70
+0,0,exclude 
+n
+1
+ 
+1
+y
+mo70
+n
+md70'
+ 
+ 
+n
+1
+ 
+1
+y
+mf7%y%
+n
+0
+ 
+ 
+n
+1
+ 
+1                / kasvatetaan pohjamatriisia
+y
+mf7%y%
+n
+mf6%y%*
+((((-1*(mo70-1))*mo7%y%/mo6%y%)+
+((-1*(md70-1))*md7%y%/md6%y%))/2)+
+(mo70*mo7%y%*mf70)+(md70*md7%y%*mf70')
+ 
+ 
+n
+1
+ 
+1                / muuttuvien alueiden diagonaali
+y
+mf81
+n
+mo70*mf80 
+ 
+ 
+n
+1
+ 
+1                / muuttuvien alueiden diagonaalile 5% tuotoksesta
+y
+mf7%y%
+n
+mo7%y%*0.05
+
+mf81
+0,0,exclude  
+y
+gr101,gr3936
+
+gr101,gr3936
+
+1
+
+q
+~y+1
+~?y<10
+~$alku2
+~# Luuppi2 paattyy
+~#
+~# Balansoidaan pohjamatriisit ennustetilanteen tuotoksiin
+~z=71
+~# luuppi3 alkaa
+~:alku3
+3.22
+1
+mf%z%
+mo%z%
+md%z%
+y
+gr101,gr3936
+ 
+gr101,gr3936
+ 
+
+2
+1
+mf%z%
+n
+1
+ 
+q
+~z+1
+~?z<80
+~$alku3
+~# Luuppi3 paattyy
+~#
+~# Lasketaan jatekuljetusten tuotokset ja suunnataan
+3.21
+1
+y
+mo82
+y
+jate
+jatetuotos pks (ajon)
+y
+0
+((1*md11')+(0.2*md17'))/8000
+ 
+ 
+y
+gr101,gr499
+ 
+1
+ 
+1
+y
+mf82
+y
+jate
+jatekuljetukset pks
+y
+0
+(md82*mo82)+(md82'*mo82')
+ 
+ 
+n
+1
+ 
+1            / Lisataan jatekuljetukset KA-matriiseihin
+y
+mf72
+n
+mf72+0.0659*mf82
+ 
+ 
+n
+1
+ 
+1
+y
+mf75
+n
+mf75+0.0702*mf82
+ 
+ 
+n
+1
+ 
+1
+y
+mf78
+n
+mf78+0.0662*mf82
+ 
+ 
+n
+1
+ 
+q
+~# Lasketaan summat
+~z=71
+~# Luuppi4 alkaa
+~:alku4
+3.21
+1
+y
+mo%z%
+n
+mf%z%
+ 
+ 
+n
+ 
+1
+ 
+1
+y
+md%z%
+n
+mf%z%
+ 
+ 
+n
+ 
+1
+ 
+1
+y
+ms%z%
+n
+mf%z%
+ 
+ 
+n
+ 
+ 
+1
+ 
+q
+~z+1
+~?z<80
+~$alku4
+~# Luuppi4 paattyy
+~#
+~/ Makro tama_HM31.mac ajettu loppuun
