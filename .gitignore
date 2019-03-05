@@ -236,11 +236,7 @@ sijoittelu/database/AJA_PERUS_LOPUT_M2016.MAC
 sijoittelu/database/aja_sisajo.mac
 sijoittelu/database/aja_sisajo_loppu.mac
 sijoittelu/database/ajatrass_loppu_M2016.mac
-sijoittelu/database/hassmat.py
-sijoittelu/database/parameters.py
-sijoittelu/database/run_assignment.py
-sijoittelu/database/run_end_assignment.py
-sijoittelu/database/trassmat.py
+sijoittelu/database/*.py
 ennuste/database/emmebank
 ennuste/database/reports
 ennuste/database/usemacro_7112
