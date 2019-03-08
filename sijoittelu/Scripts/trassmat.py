@@ -41,7 +41,7 @@ def transit_ass (emme_modeller, scen_id, demand_mat_id, result_mat_id):
                                    + segment.dwell_time)
             # Travel time for trams AHT
             if segment.transit_time_func == 3:
-                speedstr = str(segment.link.data1)
+                speedstr = str(int(segment.link.data1))
                 # Digits 5-6 from end (1-2 from beg.) represent AHT speed.
                 # If AHT speed is less than 10, data1 will have only 5 digits.
                 speed = int(speedstr[:-4])
@@ -49,14 +49,14 @@ def transit_ass (emme_modeller, scen_id, demand_mat_id, result_mat_id):
                                    + segment.dwell_time)
             # Travel time for trams PT
             if segment.transit_time_func == 4:
-                speedstr = str(segment.link.data1)
+                speedstr = str(int(segment.link.data1))
                 # Digits 3-4 from end represent PT speed.
                 speed = int(speedstr[-4:-2])
                 cumulative_time += ((segment.link.length / speed) * 60
                                    + segment.dwell_time)
             # Travel time for trams IHT
             if segment.transit_time_func == 5:
-                speedstr = str(segment.link.data1)
+                speedstr = str(int(segment.link.data1))
                 # Digits 1-2 from end represent IHT speed.
                 speed = int(speedstr[-2:])
                 cumulative_time += ((segment.link.length / speed) * 60
@@ -95,7 +95,7 @@ def transit_ass (emme_modeller, scen_id, demand_mat_id, result_mat_id):
         "selections": {
             "transit_line": "mode=b",
         },
-        "expression": "6",
+        "expression": "3",
         "result": "ut3",
         "aggregation": None,
     })
@@ -105,7 +105,7 @@ def transit_ass (emme_modeller, scen_id, demand_mat_id, result_mat_id):
         "selections": {
             "transit_line": "mode=g",
         },
-        "expression": "6",
+        "expression": "3",
         "result": "ut3",
         "aggregation": None,
     })
@@ -115,7 +115,7 @@ def transit_ass (emme_modeller, scen_id, demand_mat_id, result_mat_id):
         "selections": {
             "transit_line": "mode=de",
         },
-        "expression": "8",
+        "expression": "5",
         "result": "ut3",
         "aggregation": None,
     })
@@ -125,7 +125,7 @@ def transit_ass (emme_modeller, scen_id, demand_mat_id, result_mat_id):
         "selections": {
             "transit_line": "mode=rj",
         },
-        "expression": "5",
+        "expression": "2",
         "result": "ut3",
         "aggregation": None,
     })
@@ -181,7 +181,7 @@ def transit_ass (emme_modeller, scen_id, demand_mat_id, result_mat_id):
             "headway_fraction": 0.5,
             "effective_headways": "hdw",
             "spread_factor": 1,
-            "perception_factor": 2.5
+            "perception_factor": 1.5
         },
         # Boarding time is defined for each journey level separately,
         # so here we just set the default to zero.
@@ -208,7 +208,7 @@ def transit_ass (emme_modeller, scen_id, demand_mat_id, result_mat_id):
         },
         "in_vehicle_cost": None,
         "aux_transit_time": {
-            "perception_factor": 1.7
+            "perception_factor": 1.75
         },
         "aux_transit_cost": None,
         "flow_distribution_at_origins": {
@@ -242,7 +242,7 @@ def transit_ass (emme_modeller, scen_id, demand_mat_id, result_mat_id):
                     },
                     "on_segments": {
                         "penalty": "@wait_time_dev",
-                        "perception_factor": 2.5
+                        "perception_factor": 3.5
                     },
                 },
                 "boarding_cost": None,
@@ -261,7 +261,7 @@ def transit_ass (emme_modeller, scen_id, demand_mat_id, result_mat_id):
                     },
                     "on_segments": {
                         "penalty": "@wait_time_dev",
-                        "perception_factor": 2.5
+                        "perception_factor": 3.5
                     }
                 },
                 "boarding_cost": {
@@ -306,12 +306,12 @@ def transit_ass (emme_modeller, scen_id, demand_mat_id, result_mat_id):
         "inro.emme.transit_assignment.extended_transit_assignment")
     congested_assignment = emme_modeller.tool(
         "inro.emme.transit_assignment.congested_transit_assignment")
-    # transit_assignment(trass_spec, scenario)
-    congested_assignment(transit_assignment_spec=trass_spec, 
-                         congestion_function=func,
-                         stopping_criteria=stop, 
-                         log_worksheets=False, 
-                         scenario=scenario)
+    transit_assignment(trass_spec, scenario)
+    # congested_assignment(transit_assignment_spec=trass_spec, 
+                         # congestion_function=func,
+                         # stopping_criteria=stop, 
+                         # log_worksheets=False, 
+                         # scenario=scenario)
     
     tottim_id = "mf" + result_mat_id + "0"
     inveht_id = "mf" + result_mat_id + "1"
